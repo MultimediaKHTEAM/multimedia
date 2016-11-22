@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:vumeter="http://schemas.android.com/apk/res-auto"
+    android:padding="10dp"
+    android:id="@+id/mini_fragment"
+    android:background="#df9292">
+
+    <ImageView
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:id="@+id/imgSongPic"
+        android:src="@drawable/app_icon_xlarge" />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/songInfoLayout"
+        android:layout_toRightOf="@+id/imgSongPic"
+        android:layout_marginLeft="30dp"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Large Text"
+            android:id="@+id/tvMiniTitle"
+            android:textColor="#ffffff" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="New Text"
+            android:id="@+id/tvMiniArtis"
+            android:textColor="#ffffff" />
+    </LinearLayout>
+
+    <io.gresse.hugo.vumeterlibrary.VuMeterView
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:id="@+id/vumeter"
+        android:layout_toRightOf="@+id/songInfoLayout"
+        android:layout_marginLeft="20dp"
+        vumeter:vumeter_stopSize="5dp"
+        vumeter:vumeter_speed="10"
+        vumeter:vumeter_blockNumber="3"
+        vumeter:vumeter_blockSpacing="5dp"
+        vumeter:vumeter_backgroundColor="#336ee5" />
+</RelativeLayout>

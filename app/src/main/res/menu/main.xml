@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:id="@+id/nowPlaying"
+        android:title="@string/now_playing"
+        android:orderInCategory="0"
+        app:showAsAction="always"
+        android:icon="@drawable/map_marker"/>
+    <item
+        android:id="@+id/action_share"
+        android:title="Share Song"
+        android:orderInCategory="100">
+    </item>
+    <item
+        android:id="@+id/action_hide"
+        android:title="Hide Playing Now"
+        android:orderInCategory="101">
+    </item>
+</menu>
