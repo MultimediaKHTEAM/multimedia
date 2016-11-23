@@ -178,7 +178,7 @@
         android:layout_width="match_parent"
         android:layout_height="260dp"
         android:layout_below="@id/viewpagertab"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="110dp"
         android:layout_alignParentTop="true"
         />
 

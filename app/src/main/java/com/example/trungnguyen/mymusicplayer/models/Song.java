@@ -17,7 +17,6 @@ public class Song implements Parcelable {
     private int mYearReleased;
     private long mAlbumId;
     private boolean mIsFavorite;
-    private boolean isPlaying;
     public Song(String url, long id, String title, int duration, String artist, String label,
                 int yearReleased, long albumId, boolean isFavorite) {
         setmSongUrl(url);
@@ -29,14 +28,6 @@ public class Song implements Parcelable {
         setYearReleased(yearReleased);
         setAlbumId(albumId);
         setIsFavorite(isFavorite);
-    }
-
-    public boolean isPlaying() {
-        return isPlaying;
-    }
-
-    public void setPlaying(boolean playing) {
-        isPlaying = playing;
     }
 
     public void setmSongUrl(String mSongUrl) {

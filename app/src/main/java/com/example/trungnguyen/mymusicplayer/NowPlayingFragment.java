@@ -19,6 +19,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
+import android.test.suitebuilder.annotation.LargeTest;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,6 +28,7 @@ import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.example.trungnguyen.mymusicplayer.managers.LastSongPreference;
 import com.example.trungnguyen.mymusicplayer.models.Song;
 import com.ogaclejapan.smarttablayout.SmartTabLayout;
 import com.ogaclejapan.smarttablayout.utils.ViewPagerItemAdapter;
@@ -54,7 +56,7 @@ public class NowPlayingFragment extends Fragment {
     private boolean mBound = false;
     private Messenger activityMessenger = new Messenger(new ActivityHandler(this));
     private Messenger playerMessenger;
-    private String songUrl;
+    private String songUrl = null;
     private boolean isLiked = false;
     int repeatCount = 0;
     private boolean isRepeatOne = false;
@@ -92,7 +94,6 @@ public class NowPlayingFragment extends Fragment {
             mBound = false;
         }
     };
-    public static final String SaveBySharedPreferences = "AAA";
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -176,87 +177,89 @@ public class NowPlayingFragment extends Fragment {
             else imgLike.setImageResource(R.drawable.top_rated);
             songTitle.setText(mSong.getTitle());
             songArtist.setText(mSong.getArtist());
-            imgLike.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (!mSong.isFavorite()) {
-                        imgLike.setImageResource(R.drawable.top_rated_light);
-                        mSong.setIsFavorite(true);
-                    } else {
-                        imgLike.setImageResource(R.drawable.top_rated);
-                        mSong.setIsFavorite(false);
-                    }
-                }
-            });
-            imgPlayPause.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (mBound) {
-                        if (isNetworkAvailable()) {
-                            Message message = Message.obtain();
-                            message.arg1 = 2;
-                            message.arg2 = 1;
-                            message.replyTo = activityMessenger;
-                            try {
-                                playerMessenger.send(message);
-                            } catch (RemoteException e) {
-                                e.printStackTrace();
-                            }
-                        } else
-                            alertUserAboutError();
-                    }
-                }
-            });
-            btnRepeat.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (repeatCount == 2)
-                        repeatCount = 0;
-                    else repeatCount++;
-                    if (repeatCount == 1) {
-                        isRepeatAll = true;
-                        isRepeatOne = false;
-                        btnRepeat.setImageResource(R.drawable.btn_playback_repeat_all);
-                    } else if (repeatCount == 2) {
-                        isRepeatOne = true;
-                        isRepeatAll = false;
-                        btnRepeat.setImageResource(R.drawable.btn_playback_repeat_one);
-                    } else {
-                        isRepeatAll = false;
-                        isRepeatOne = false;
-                        btnRepeat.setImageResource(R.drawable.btn_playback_repeat);
-                    }
-                    Intent intent = new Intent("REPEAT");
-                    intent.putExtra("REPEAT_ALL", isRepeatAll);
-                    intent.putExtra("REPEAT_ONE", isRepeatOne);
-                    getActivity().sendBroadcast(intent);
-                }
-            });
-            seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-                @Override
-                public void onProgressChanged(SeekBar seekBar, int i, boolean fromUser) {
-                    if (fromUser) {
-                        Log.d(TAG, "Call On progress changed");
-                        int seekPos = seekBar.getProgress();
-                        seekBarIntent.putExtra("seekNewPosByUser", seekPos);
-                        getActivity().sendBroadcast(seekBarIntent);
-                    }
-                }
-
-                @Override
-                public void onStartTrackingTouch(SeekBar seekBar) {
-
-                }
-
-                @Override
-                public void onStopTrackingTouch(SeekBar seekBar) {
-
-                }
-            });
         }
+        imgLike.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!mSong.isFavorite()) {
+                    imgLike.setImageResource(R.drawable.top_rated_light);
+                    mSong.setIsFavorite(true);
+                } else {
+                    imgLike.setImageResource(R.drawable.top_rated);
+                    mSong.setIsFavorite(false);
+                }
+            }
+        });
+        imgPlayPause.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mBound) {
+                    if (isNetworkAvailable()) {
+                        Message message = Message.obtain();
+                        message.arg1 = 2;
+                        message.arg2 = 1;
+                        message.replyTo = activityMessenger;
+                        try {
+                            playerMessenger.send(message);
+                        } catch (RemoteException e) {
+                            e.printStackTrace();
+                        }
+                    } else
+                        alertUserAboutError();
+                }
+            }
+        });
+        btnRepeat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (repeatCount == 2)
+                    repeatCount = 0;
+                else repeatCount++;
+                if (repeatCount == 1) {
+                    isRepeatAll = true;
+                    isRepeatOne = false;
+                    btnRepeat.setImageResource(R.drawable.btn_playback_repeat_all);
+                } else if (repeatCount == 2) {
+                    isRepeatOne = true;
+                    isRepeatAll = false;
+                    btnRepeat.setImageResource(R.drawable.btn_playback_repeat_one);
+                } else {
+                    isRepeatAll = false;
+                    isRepeatOne = false;
+                    btnRepeat.setImageResource(R.drawable.btn_playback_repeat);
+                }
+                sendBroadcastRepeat();
+            }
+        });
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean fromUser) {
+                if (fromUser) {
+                    Log.d(TAG, "Call On progress changed");
+                    int seekPos = seekBar.getProgress();
+                    seekBarIntent.putExtra("seekNewPosByUser", seekPos);
+                    getActivity().sendBroadcast(seekBarIntent);
+                }
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
         return mReturnView;
     }
-
+    private void sendBroadcastRepeat(){
+        Intent intent = new Intent("REPEAT");
+        intent.putExtra("REPEAT_ALL", isRepeatAll);
+        intent.putExtra("REPEAT_ONE", isRepeatOne);
+        getActivity().sendBroadcast(intent);
+    }
     private void addControls(View mReturnView) {
         mVuMeterView = (VuMeterView) mReturnView.findViewById(R.id.vumeter);
         songTitle = (TextView) mReturnView.findViewById(R.id.tvMiniTitle);
@@ -348,30 +351,31 @@ public class NowPlayingFragment extends Fragment {
     public void onResume() {
         super.onResume();
         Log.d(TAG, "Now Playing Fragment onResume");
-        SharedPreferences preferences = getActivity().getSharedPreferences(SaveBySharedPreferences, Activity.MODE_PRIVATE);
-        repeatCount = preferences.getInt("SaveStatus", 0);
+        repeatCount = LastSongPreference.getLastRepeatCount(getActivity());
         switch (repeatCount) {
             case 0:
                 btnRepeat.setImageResource(R.drawable.btn_playback_repeat);
+                isRepeatAll = false;
+                isRepeatOne = false;
                 break;
             case 1:
                 btnRepeat.setImageResource(R.drawable.btn_playback_repeat_all);
+                isRepeatAll = true;
+                isRepeatOne = false;
                 break;
             case 2:
                 btnRepeat.setImageResource(R.drawable.btn_playback_repeat_one);
+                isRepeatAll = false;
+                isRepeatOne = true;
                 break;
         }
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver((getMediaInfoReceive),
-                new IntentFilter(PlayerService.UPDATE_SEEKBAR)
-        );
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver((stopMediaBroadcastReceive),
-                new IntentFilter(PlayerService.COPA_RESULT)
-        );
+        sendBroadcastRepeat();
     }
 
     @Override
     public void onPause() {
         super.onPause();
+        LastSongPreference.saveLastRepeatCount(getActivity(), repeatCount);
         Log.d(TAG, "Now Playing Fragment OnPause");
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(getMediaInfoReceive);
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(stopMediaBroadcastReceive);
@@ -379,18 +383,25 @@ public class NowPlayingFragment extends Fragment {
             getActivity().unbindService(serviceConnection);
             mBound = false;
         }
-        SharedPreferences preferences = getActivity().getSharedPreferences(SaveBySharedPreferences, Activity.MODE_PRIVATE);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putInt("SaveStatus", repeatCount);
-        editor.commit();
     }
 
     @Override
     public void onStart() {
         super.onStart();
         Log.d(TAG, "Now Playing Fragment onStart");
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver((getMediaInfoReceive),
+                new IntentFilter(PlayerService.UPDATE_SEEKBAR)
+        );
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver((stopMediaBroadcastReceive),
+                new IntentFilter(PlayerService.COPA_RESULT)
+        );
+        if(songUrl == null) {
+            songUrl = LastSongPreference.getLastSongPlayingUrl(getActivity());
+            songArtist.setText(LastSongPreference.getLastSongPlayingArtics(getActivity()));
+            songTitle.setText(LastSongPreference.getLastSongPlayingTitle(getActivity()));
+        }
         Intent intent = new Intent(getActivity(), PlayerService.class);
-        if (getArguments().getParcelable(MainActivity.SONG_NAME) != null)
+        if (songUrl != null)
             getActivity().bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
     }
 
@@ -400,6 +411,11 @@ public class NowPlayingFragment extends Fragment {
         if (mBound) {
             getActivity().unbindService(serviceConnection);
             mBound = false;
+        }
+        if (getArguments().getParcelable(MainActivity.SONG_NAME) != null) {
+            LastSongPreference.saveLastSongPlayingUrl(getActivity(), mSong.getmSongUrl());
+            LastSongPreference.saveLastSongPlayingTitle(getActivity(), mSong.getTitle());
+            LastSongPreference.saveLastSongPlayingArtics(getActivity(), mSong.getArtist());
         }
     }
 }
