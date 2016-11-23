@@ -1,45 +1,45 @@
-//package com.example.trungnguyen.mymusicplayer;
-//
-//import android.app.Activity;
-//import android.content.BroadcastReceiver;
-//import android.content.ComponentName;
-//import android.content.Context;
-//import android.content.Intent;
-//import android.content.IntentFilter;
-//import android.content.ServiceConnection;
-//import android.content.SharedPreferences;
-//import android.net.ConnectivityManager;
-//import android.net.NetworkInfo;
-//import android.os.Bundle;
-//import android.os.IBinder;
-//import android.os.Message;
-//import android.os.Messenger;
-//import android.os.RemoteException;
-//import android.support.design.widget.Snackbar;
-//import android.support.v4.content.LocalBroadcastManager;
-//import android.support.v4.view.ViewPager;
-//import android.support.v7.app.AppCompatActivity;
-//import android.util.Log;
-//import android.view.Menu;
-//import android.view.MenuItem;
-//import android.view.View;
-//
-//import android.widget.ImageView;
-//import android.widget.RelativeLayout;
-//import android.widget.SeekBar;
-//import android.widget.TextView;
-//
-//import com.example.trungnguyen.mymusicplayer.models.Song;
-//import com.ogaclejapan.smarttablayout.SmartTabLayout;
-//import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItemAdapter;
-//import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItems;
-//import java.util.concurrent.TimeUnit;
-//import com.sothree.slidinguppanel.SlidingUpPanelLayout;
-//import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelSlideListener;
-//import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelState;
-//
-//public class DetailActivity extends AppCompatActivity implements SeekBar.OnSeekBarChangeListener {
-//
+package com.example.trungnguyen.mymusicplayer;
+
+import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.ServiceConnection;
+import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.Bundle;
+import android.os.IBinder;
+import android.os.Message;
+import android.os.Messenger;
+import android.os.RemoteException;
+import android.support.design.widget.Snackbar;
+import android.support.v4.content.LocalBroadcastManager;
+import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.SeekBar;
+import android.widget.TextView;
+
+import com.example.trungnguyen.mymusicplayer.models.Song;
+import com.ogaclejapan.smarttablayout.SmartTabLayout;
+import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItemAdapter;
+import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItems;
+import java.util.concurrent.TimeUnit;
+import com.sothree.slidinguppanel.SlidingUpPanelLayout;
+import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelSlideListener;
+import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelState;
+
+public class DetailActivity extends AppCompatActivity  {
+
 //    private static final String TAG = DetailActivity.class.getSimpleName();
 //    private Song mSong;
 //    SeekBar seekBar;
@@ -384,4 +384,4 @@
 //        super.onBackPressed();
 //        overridePendingTransition(R.anim.top_in, R.anim.bottom_out);
 //    }
-//}
+}

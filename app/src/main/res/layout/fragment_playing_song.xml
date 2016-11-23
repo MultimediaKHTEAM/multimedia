@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/rootLayoutActivityDetail"
+    android:id="@+id/rootFragmentNowPlaying"
     android:background="@drawable/background"
     tools:context="com.example.trungnguyen.mymusicplayer.MainActivity">
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -35,7 +35,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="Large Text"
                 android:id="@+id/tvMiniTitle"
                 android:textColor="#ffffff"
                 android:textSize="20sp" />
@@ -43,7 +42,6 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="New Text"
                 android:id="@+id/tvMiniArtis"
                 android:textColor="#ffffff"
                 android:textSize="15sp" />

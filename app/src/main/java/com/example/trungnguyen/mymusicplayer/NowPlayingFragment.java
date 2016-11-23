@@ -166,93 +166,94 @@ public class NowPlayingFragment extends Fragment {
             container, @Nullable Bundle savedInstanceState) {
         Log.d(TAG, "Now Playing Fragment onCreateView");
         View mReturnView = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_playing_song, container, false);
-        addControls(mReturnView);
         updateUIFromService();
-        mSong = getArguments().getParcelable(MainActivity.SONG_NAME);
-        if (getArguments().getParcelable(MainActivity.SONG_NAME) != null)
+        addControls(mReturnView);
+        if (getArguments().getParcelable(MainActivity.SONG_NAME) != null) {
+            mSong = getArguments().getParcelable(MainActivity.SONG_NAME);
             songUrl = mSong.getmSongUrl();
-        if (mSong.isFavorite())
-            imgLike.setImageResource(R.drawable.top_rated_light);
-        else imgLike.setImageResource(R.drawable.top_rated);
-        songTitle.setText(mSong.getTitle());
-        songArtist.setText(mSong.getArtist());
-        imgLike.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (!mSong.isFavorite()) {
-                    imgLike.setImageResource(R.drawable.top_rated_light);
-                    mSong.setIsFavorite(true);
-                } else {
-                    imgLike.setImageResource(R.drawable.top_rated);
-                    mSong.setIsFavorite(false);
+            if (mSong.isFavorite())
+                imgLike.setImageResource(R.drawable.top_rated_light);
+            else imgLike.setImageResource(R.drawable.top_rated);
+            songTitle.setText(mSong.getTitle());
+            songArtist.setText(mSong.getArtist());
+            imgLike.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (!mSong.isFavorite()) {
+                        imgLike.setImageResource(R.drawable.top_rated_light);
+                        mSong.setIsFavorite(true);
+                    } else {
+                        imgLike.setImageResource(R.drawable.top_rated);
+                        mSong.setIsFavorite(false);
+                    }
                 }
-            }
-        });
-        imgPlayPause.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (mBound) {
-                    if (isNetworkAvailable()) {
-                        Message message = Message.obtain();
-                        message.arg1 = 2;
-                        message.arg2 = 1;
-                        message.replyTo = activityMessenger;
-                        try {
-                            playerMessenger.send(message);
-                        } catch (RemoteException e) {
-                            e.printStackTrace();
-                        }
-                    } else
-                        alertUserAboutError();
+            });
+            imgPlayPause.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (mBound) {
+                        if (isNetworkAvailable()) {
+                            Message message = Message.obtain();
+                            message.arg1 = 2;
+                            message.arg2 = 1;
+                            message.replyTo = activityMessenger;
+                            try {
+                                playerMessenger.send(message);
+                            } catch (RemoteException e) {
+                                e.printStackTrace();
+                            }
+                        } else
+                            alertUserAboutError();
+                    }
                 }
-            }
-        });
-        btnRepeat.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (repeatCount == 2)
-                    repeatCount = 0;
-                else repeatCount++;
-                if (repeatCount == 1) {
-                    isRepeatAll = true;
-                    isRepeatOne = false;
-                    btnRepeat.setImageResource(R.drawable.btn_playback_repeat_all);
-                } else if (repeatCount == 2) {
-                    isRepeatOne = true;
-                    isRepeatAll = false;
-                    btnRepeat.setImageResource(R.drawable.btn_playback_repeat_one);
-                } else {
-                    isRepeatAll = false;
-                    isRepeatOne = false;
-                    btnRepeat.setImageResource(R.drawable.btn_playback_repeat);
+            });
+            btnRepeat.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (repeatCount == 2)
+                        repeatCount = 0;
+                    else repeatCount++;
+                    if (repeatCount == 1) {
+                        isRepeatAll = true;
+                        isRepeatOne = false;
+                        btnRepeat.setImageResource(R.drawable.btn_playback_repeat_all);
+                    } else if (repeatCount == 2) {
+                        isRepeatOne = true;
+                        isRepeatAll = false;
+                        btnRepeat.setImageResource(R.drawable.btn_playback_repeat_one);
+                    } else {
+                        isRepeatAll = false;
+                        isRepeatOne = false;
+                        btnRepeat.setImageResource(R.drawable.btn_playback_repeat);
+                    }
+                    Intent intent = new Intent("REPEAT");
+                    intent.putExtra("REPEAT_ALL", isRepeatAll);
+                    intent.putExtra("REPEAT_ONE", isRepeatOne);
+                    getActivity().sendBroadcast(intent);
                 }
-                Intent intent = new Intent("REPEAT");
-                intent.putExtra("REPEAT_ALL", isRepeatAll);
-                intent.putExtra("REPEAT_ONE", isRepeatOne);
-                getActivity().sendBroadcast(intent);
-            }
-        });
-        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int i, boolean fromUser) {
-                if (fromUser) {
-                    Log.d(TAG, "Call On progress changed");
-                    int seekPos = seekBar.getProgress();
-                    seekBarIntent.putExtra("seekNewPosByUser", seekPos);
-                    getActivity().sendBroadcast(seekBarIntent);
+            });
+            seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                @Override
+                public void onProgressChanged(SeekBar seekBar, int i, boolean fromUser) {
+                    if (fromUser) {
+                        Log.d(TAG, "Call On progress changed");
+                        int seekPos = seekBar.getProgress();
+                        seekBarIntent.putExtra("seekNewPosByUser", seekPos);
+                        getActivity().sendBroadcast(seekBarIntent);
+                    }
                 }
-            }
 
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
+                @Override
+                public void onStartTrackingTouch(SeekBar seekBar) {
 
-            }
+                }
 
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
+                @Override
+                public void onStopTrackingTouch(SeekBar seekBar) {
 
-            }
-        });
+                }
+            });
+        }
         return mReturnView;
     }
 
@@ -389,7 +390,8 @@ public class NowPlayingFragment extends Fragment {
         super.onStart();
         Log.d(TAG, "Now Playing Fragment onStart");
         Intent intent = new Intent(getActivity(), PlayerService.class);
-        getActivity().bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
+        if (getArguments().getParcelable(MainActivity.SONG_NAME) != null)
+            getActivity().bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
     }
 
     @Override

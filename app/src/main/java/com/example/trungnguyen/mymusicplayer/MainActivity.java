@@ -10,6 +10,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -41,7 +42,7 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelState;
 import io.gresse.hugo.vumeterlibrary.VuMeterView;
 
 
-public class MainActivity extends AppCompatActivity implements SongListFragment.OnSongItemSelectedInterface {
+public class MainActivity extends ActionBarActivity implements SongListFragment.OnSongItemSelectedInterface {
     public static final String SONG_NAME = "song_name";
     public static final String LIST_POSITION = "list_pos";
     public static final String IS_FAVORITE = "is_favorite";
@@ -65,12 +66,23 @@ public class MainActivity extends AppCompatActivity implements SongListFragment.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Log.d(TAG, "onCreate - MainActivity");
-        SongListFragment savedFragment = (SongListFragment) getSupportFragmentManager().findFragmentByTag(FRAGMENT_SONG_LIST);
+        SongListFragment savedFragment = (SongListFragment) getSupportFragmentManager().findFragmentByTag(FRAGMENT_NOW_PLAYING);
         if (savedFragment == null) {
             SongListFragment songListFragment = new SongListFragment();
             FragmentManager fragmentManager = getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.add(R.id.placeHolder, songListFragment, FRAGMENT_SONG_LIST);
+            fragmentTransaction.commit();
+        }
+        NowPlayingFragment nowPlayingFragment1 = (NowPlayingFragment) getSupportFragmentManager().findFragmentByTag(FRAGMENT_NOW_PLAYING);
+        if(nowPlayingFragment1==null) {
+            Bundle bundle = new Bundle();
+            bundle.putParcelable(MainActivity.SONG_NAME, null);
+            NowPlayingFragment nowPlayingFragment = new NowPlayingFragment();
+            nowPlayingFragment.setArguments(bundle);
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.add(R.id.childPlaceHolder, nowPlayingFragment, MainActivity.FRAGMENT_NOW_PLAYING);
             fragmentTransaction.commit();
         }
         addControls();

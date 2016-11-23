@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,8 @@ import com.example.trungnguyen.mymusicplayer.adapters.PlaylistAdapter;
  * Created by Trung Nguyen on 11/21/2016.
  */
 public class SongListFragment extends Fragment {
+    private static final String TAG = SongListFragment.class.getSimpleName();
+
     public interface OnSongItemSelectedInterface {
         void onListSongItemSelected(int index, View v);
     }
@@ -26,6 +29,7 @@ public class SongListFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        Log.d(TAG,"SongListFragment onCreateView");
         OnSongItemSelectedInterface listener = (OnSongItemSelectedInterface) getActivity();
         View mReturnView = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_song_list, container, false);
         RecyclerView recyclerView = (RecyclerView) mReturnView.findViewById(R.id.recyclerView);
