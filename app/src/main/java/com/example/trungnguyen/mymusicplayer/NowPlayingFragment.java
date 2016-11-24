@@ -173,8 +173,8 @@ public class NowPlayingFragment extends Fragment {
             mSong = getArguments().getParcelable(MainActivity.SONG_NAME);
             songUrl = mSong.getmSongUrl();
             if (mSong.isFavorite())
-                imgLike.setImageResource(R.drawable.top_rated_light);
-            else imgLike.setImageResource(R.drawable.top_rated);
+                imgLike.setImageResource(R.drawable.heart_white_small);
+            else imgLike.setImageResource(R.drawable.heart_outline_small);
             songTitle.setText(mSong.getTitle());
             songArtist.setText(mSong.getArtist());
         }
@@ -182,10 +182,10 @@ public class NowPlayingFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 if (!mSong.isFavorite()) {
-                    imgLike.setImageResource(R.drawable.top_rated_light);
+                    imgLike.setImageResource(R.drawable.heart_white_small);
                     mSong.setIsFavorite(true);
                 } else {
-                    imgLike.setImageResource(R.drawable.top_rated);
+                    imgLike.setImageResource(R.drawable.heart_outline_small);
                     mSong.setIsFavorite(false);
                 }
             }

@@ -30,6 +30,7 @@ import android.widget.Toast;
 
 
 import com.example.trungnguyen.mymusicplayer.adapters.PlaylistAdapter;
+import com.example.trungnguyen.mymusicplayer.fragments.LauchingFragment;
 import com.example.trungnguyen.mymusicplayer.fragments.SongListFragment;
 import com.example.trungnguyen.mymusicplayer.models.Song;
 import com.ogaclejapan.smarttablayout.SmartTabLayout;
@@ -60,22 +61,31 @@ public class MainActivity extends ActionBarActivity implements SongListFragment.
     public static TextView miniTitle, miniArtis;
     public static ImageView miniSongPic;
     public static final String FRAGMENT_SONG_LIST = "fragment_song_list";
+    public static final String LAUCHING_FRAGMENT = "lauching_fragment";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Log.d(TAG, "onCreate - MainActivity");
-        SongListFragment savedFragment = (SongListFragment) getSupportFragmentManager().findFragmentByTag(FRAGMENT_NOW_PLAYING);
+//        SongListFragment savedFragment = (SongListFragment) getSupportFragmentManager().findFragmentByTag(FRAGMENT_NOW_PLAYING);
+//        if (savedFragment == null) {
+//            SongListFragment songListFragment = new SongListFragment();
+//            FragmentManager fragmentManager = getSupportFragmentManager();
+//            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//            fragmentTransaction.add(R.id.placeHolder, songListFragment, FRAGMENT_SONG_LIST);
+//            fragmentTransaction.commit();
+//        }
+        LauchingFragment savedFragment = (LauchingFragment) getSupportFragmentManager().findFragmentByTag(LAUCHING_FRAGMENT);
         if (savedFragment == null) {
-            SongListFragment songListFragment = new SongListFragment();
+            LauchingFragment lauchingFragment = new LauchingFragment();
             FragmentManager fragmentManager = getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.add(R.id.placeHolder, songListFragment, FRAGMENT_SONG_LIST);
+            fragmentTransaction.add(R.id.placeHolder, lauchingFragment, LAUCHING_FRAGMENT);
             fragmentTransaction.commit();
         }
         NowPlayingFragment nowPlayingFragment1 = (NowPlayingFragment) getSupportFragmentManager().findFragmentByTag(FRAGMENT_NOW_PLAYING);
-        if(nowPlayingFragment1==null) {
+        if (nowPlayingFragment1 == null) {
             Bundle bundle = new Bundle();
             bundle.putParcelable(MainActivity.SONG_NAME, null);
             NowPlayingFragment nowPlayingFragment = new NowPlayingFragment();
@@ -181,6 +191,7 @@ public class MainActivity extends ActionBarActivity implements SongListFragment.
         miniSongPic = (ImageView) findViewById(R.id.imgSongPic);
 //        mVuMeterView = (VuMeterView) findViewById(R.id.vumeter);
 //        mVuMeterView.pause();
+        setToFullScreen();
     }
 
 //    @Override
@@ -235,7 +246,15 @@ public class MainActivity extends ActionBarActivity implements SongListFragment.
         }
         return super.onOptionsItemSelected(item);
     }
-
+    private void setToFullScreen() {
+        ViewGroup rootLayout = (ViewGroup) findViewById(R.id.sliding_layout);
+        rootLayout.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE
+                | View.SYSTEM_UI_FLAG_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+    }
     @Override
     public void onBackPressed() {
         if (mLayout != null &&
@@ -296,13 +315,9 @@ public class MainActivity extends ActionBarActivity implements SongListFragment.
 //        editor.commit();
 //    }
 //
-//    @Override
-//    protected void onResume() {
-//        super.onResume();
-//        SharedPreferences preferences = getSharedPreferences(SAVING_MINISCREEN, Activity.MODE_PRIVATE);
-//        String title = preferences.getString("title", "");
-//        String artis = preferences.getString("artis", "");
-////        miniTitle.setText(title);
-////        miniArtis.setText(artis);
-//    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setToFullScreen();
+    }
 }

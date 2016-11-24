@@ -50,8 +50,8 @@ public class LastSongPreference {
     }
 
     public static String getLastSongPlayingArtics(Context context) {
-        SharedPreferences sharedPerferences = getLastSongPreference(context);
-        String lastSongArtist = sharedPerferences.getString(LAST_PLAYING_SONG_ARTICS, "");
+        SharedPreferences sharedPreferences = getLastSongPreference(context);
+        String lastSongArtist = sharedPreferences.getString(LAST_PLAYING_SONG_ARTICS, "");
         return lastSongArtist;
     }
 
@@ -63,8 +63,8 @@ public class LastSongPreference {
     }
 
     public static int getLastRepeatCount(Context context) {
-        SharedPreferences sharedPerferences = getLastSongPreference(context);
-        int lastRepeatCount = sharedPerferences.getInt(LAST_PLAYING_SONG_REPEATCOUNT, 0);
+        SharedPreferences sharedPreferences = getLastSongPreference(context);
+        int lastRepeatCount = sharedPreferences.getInt(LAST_PLAYING_SONG_REPEATCOUNT, 0);
         return lastRepeatCount;
     }
 }

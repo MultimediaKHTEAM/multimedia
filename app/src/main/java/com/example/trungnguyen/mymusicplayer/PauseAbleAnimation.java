@@ -20,7 +20,7 @@ public class PauseAbleAnimation extends Animation {
 
     public void setAnimation() {
         animation = AnimationUtils.loadAnimation(mActivity, R.anim.turn_around);
-        animation.setDuration(8000);
+        animation.setDuration(20000);
         animation.setRepeatCount(Animation.INFINITE);
         mImgSong.startAnimation(animation);
     }

@@ -5,8 +5,7 @@
 
     <ImageView
         android:layout_width="match_parent"
-        android:layout_height="270dp"
+        android:layout_height="300dp"
         android:id="@+id/imgSong"
-        android:layout_gravity="center_horizontal"
-        android:src="@drawable/app_icon_xlarge" />
+        android:layout_gravity="center_horizontal" />
 </LinearLayout>

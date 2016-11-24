@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/rootFragmentNowPlaying"
-    android:background="@drawable/background"
+    android:background="#161d4f"
     tools:context="com.example.trungnguyen.mymusicplayer.MainActivity">
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
@@ -14,7 +14,7 @@
         android:padding="6dp"
         android:layout_alignParentTop="true"
         android:id="@+id/mini_fragment"
-        android:background="#df9292">
+        android:background="#828ee1">
 
         <ImageView
             android:layout_width="40dp"
@@ -57,7 +57,8 @@
             vumeter:vumeter_speed="10"
             vumeter:vumeter_blockNumber="3"
             vumeter:vumeter_blockSpacing="5dp"
-            vumeter:vumeter_backgroundColor="#336ee5" />
+            vumeter:vumeter_backgroundColor="#a41313"
+            />
     </RelativeLayout>
     <TextView
         android:layout_width="wrap_content"
@@ -148,8 +149,9 @@
         android:layout_height="wrap_content"
         android:id="@+id/btLike"
         android:layout_centerHorizontal="true"
-        android:src="@drawable/top_rated"
-        android:layout_below="@+id/viewpager" />
+        android:layout_below="@+id/viewpager"
+        android:layout_marginTop="15dp"
+        android:src="@drawable/heart_outline_small" />
     <com.ogaclejapan.smarttablayout.SmartTabLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -176,9 +178,9 @@
     <android.support.v4.view.ViewPager
         android:id="@+id/viewpager"
         android:layout_width="match_parent"
-        android:layout_height="260dp"
+        android:layout_height="300dp"
         android:layout_below="@id/viewpagertab"
-        android:layout_marginTop="110dp"
+        android:layout_marginTop="120dp"
         android:layout_alignParentTop="true"
         />
 
