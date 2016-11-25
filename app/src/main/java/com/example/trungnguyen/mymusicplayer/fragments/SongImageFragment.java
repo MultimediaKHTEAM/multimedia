@@ -1,4 +1,4 @@
-package com.example.trungnguyen.mymusicplayer;
+package com.example.trungnguyen.mymusicplayer.fragments;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -11,9 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.example.trungnguyen.mymusicplayer.R;
 import com.example.trungnguyen.mymusicplayer.helpers.DrawCircleImage;
-
-import java.io.InputStream;
 
 /**
  * Created by Trung Nguyen on 11/18/2016.

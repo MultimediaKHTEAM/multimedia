@@ -4,7 +4,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.RemoteException;
 
-import com.example.trungnguyen.mymusicplayer.models.Song;
+import com.example.trungnguyen.mymusicplayer.fragments.NowPlayingFragment;
 
 /**
  * Created by Trung Nguyen on 11/7/2016.

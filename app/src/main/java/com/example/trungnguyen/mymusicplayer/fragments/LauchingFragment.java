@@ -3,12 +3,21 @@ package com.example.trungnguyen.mymusicplayer.fragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
+import com.example.trungnguyen.mymusicplayer.MainActivity;
 import com.example.trungnguyen.mymusicplayer.R;
 import com.example.trungnguyen.mymusicplayer.adapters.MainMenuAdapter;
 
@@ -40,7 +49,12 @@ public class LauchingFragment extends Fragment {
         lvLauchingMenu.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int pos, long id) {
-                //jump to this fragment
+                SongListFragment songListFragment = new SongListFragment();
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.placeHolder, songListFragment, MainActivity.FRAGMENT_SONG_LIST);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
             }
         });
         return mView;

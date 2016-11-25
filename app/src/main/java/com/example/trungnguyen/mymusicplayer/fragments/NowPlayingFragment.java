@@ -1,13 +1,11 @@
-package com.example.trungnguyen.mymusicplayer;
+package com.example.trungnguyen.mymusicplayer.fragments;
 
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
-import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -19,7 +17,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
-import android.test.suitebuilder.annotation.LargeTest;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,11 +25,15 @@ import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.example.trungnguyen.mymusicplayer.ActivityHandler;
+import com.example.trungnguyen.mymusicplayer.AlertDialog;
+import com.example.trungnguyen.mymusicplayer.MainActivity;
+import com.example.trungnguyen.mymusicplayer.PauseAbleAnimation;
+import com.example.trungnguyen.mymusicplayer.PlayerService;
+import com.example.trungnguyen.mymusicplayer.R;
 import com.example.trungnguyen.mymusicplayer.managers.LastSongPreference;
 import com.example.trungnguyen.mymusicplayer.models.Song;
 import com.ogaclejapan.smarttablayout.SmartTabLayout;
-import com.ogaclejapan.smarttablayout.utils.ViewPagerItemAdapter;
-import com.ogaclejapan.smarttablayout.utils.ViewPagerItems;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItemAdapter;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItems;
 
@@ -293,7 +294,6 @@ public class NowPlayingFragment extends Fragment {
     BroadcastReceiver stopMediaBroadcastReceive = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intentStopMedia) {
-            Log.d(TAG, "CALL onReceive Stop Media - DetailActivity");
             final boolean isStopped = intentStopMedia.getBooleanExtra(PlayerService.COPA_MESSAGE, false);
             ChangeButton(isStopped);
             mVuMeterView.pause();
@@ -321,7 +321,6 @@ public class NowPlayingFragment extends Fragment {
         getMediaInfoReceive = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intentMediaInfo) {
-//                Log.d(TAG, "CALL onReceive get current Media Info - DetailActivity");
                 int currentPosition = intentMediaInfo.getIntExtra("CURRENT_POST", 0);
                 int duration = intentMediaInfo.getIntExtra("DURATION", 0);
                 seekBar.setMax(duration);

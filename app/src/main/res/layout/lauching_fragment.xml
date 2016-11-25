@@ -1,20 +1,16 @@
-<android.support.v4.widget.DrawerLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/drawer_layout"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/rootLaunchingLayout"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#161d4f">
     <!-- The main content view -->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/lauchingToolbar"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:background="#828ee1">
-        </android.support.v7.widget.Toolbar>
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="217dp"
@@ -25,13 +21,4 @@
             android:layout_height="wrap_content"
             android:id="@+id/lvLauchingMenu" />
     </LinearLayout>
-    <!-- The navigation drawer -->
-    <ListView android:id="@+id/left_drawer"
-        android:layout_width="240dp"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:choiceMode="singleChoice"
-        android:divider="@android:color/transparent"
-        android:dividerHeight="0dp"
-        android:background="#111"/>
-</android.support.v4.widget.DrawerLayout>
+</LinearLayout>

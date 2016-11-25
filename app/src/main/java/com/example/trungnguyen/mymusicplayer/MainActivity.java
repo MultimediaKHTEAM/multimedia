@@ -1,20 +1,18 @@
 package com.example.trungnguyen.mymusicplayer;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -24,6 +22,7 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,19 +30,20 @@ import android.widget.Toast;
 
 import com.example.trungnguyen.mymusicplayer.adapters.PlaylistAdapter;
 import com.example.trungnguyen.mymusicplayer.fragments.LauchingFragment;
+import com.example.trungnguyen.mymusicplayer.fragments.NowPlayingFragment;
 import com.example.trungnguyen.mymusicplayer.fragments.SongListFragment;
-import com.example.trungnguyen.mymusicplayer.models.Song;
-import com.ogaclejapan.smarttablayout.SmartTabLayout;
-import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItemAdapter;
-import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItems;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelSlideListener;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelState;
 
+import java.util.ArrayList;
+
 import io.gresse.hugo.vumeterlibrary.VuMeterView;
 
 
-public class MainActivity extends ActionBarActivity implements SongListFragment.OnSongItemSelectedInterface {
+public class MainActivity extends AppCompatActivity
+        implements SongListFragment.OnSongItemSelectedInterface,
+        NavigationView.OnNavigationItemSelectedListener {
     public static final String SONG_NAME = "song_name";
     public static final String LIST_POSITION = "list_pos";
     public static final String IS_FAVORITE = "is_favorite";
@@ -54,12 +54,15 @@ public class MainActivity extends ActionBarActivity implements SongListFragment.
     private RelativeLayout rootActivityMainLayout;
     protected static SlidingUpPanelLayout mLayout;
     private static final String TAG = MainActivity.class.getSimpleName();
-    private Button btDownload;
-    public static VuMeterView mVuMeterView;
     public static ProgressDialog dialogDownload;
-    private PlaylistAdapter mAdapter;
     public static TextView miniTitle, miniArtis;
     public static ImageView miniSongPic;
+    private Toolbar toolbar;
+    //ArrayList<String> arrayList;
+//    private ListView leftDrawer;
+//    private PlaylistAdapter mAdapter;
+//    private Button btDownload;
+//    public static VuMeterView mVuMeterView;
     public static final String FRAGMENT_SONG_LIST = "fragment_song_list";
     public static final String LAUCHING_FRAGMENT = "lauching_fragment";
 
@@ -68,14 +71,6 @@ public class MainActivity extends ActionBarActivity implements SongListFragment.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Log.d(TAG, "onCreate - MainActivity");
-//        SongListFragment savedFragment = (SongListFragment) getSupportFragmentManager().findFragmentByTag(FRAGMENT_NOW_PLAYING);
-//        if (savedFragment == null) {
-//            SongListFragment songListFragment = new SongListFragment();
-//            FragmentManager fragmentManager = getSupportFragmentManager();
-//            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//            fragmentTransaction.add(R.id.placeHolder, songListFragment, FRAGMENT_SONG_LIST);
-//            fragmentTransaction.commit();
-//        }
         LauchingFragment savedFragment = (LauchingFragment) getSupportFragmentManager().findFragmentByTag(LAUCHING_FRAGMENT);
         if (savedFragment == null) {
             LauchingFragment lauchingFragment = new LauchingFragment();
@@ -96,35 +91,12 @@ public class MainActivity extends ActionBarActivity implements SongListFragment.
             fragmentTransaction.commit();
         }
         addControls();
-//        stopMediaBroadcastReceive = new BroadcastReceiver() {
-//            @Override
-//            public void onReceive(Context context, Intent intentStopMedia) {
-//                Log.d(TAG, "CALL onReceive - MainActivity");
-//                final boolean isStopped = intentStopMedia.getBooleanExtra(PlayerService.COPA_MESSAGE, false);
-//                ChangeButton(isStopped);
-//            }
-//        };
-//        intent = new Intent(this.BROADCAST_SEEKBAR);
-//        updateUIFromService();
-//        final DownloadThread downloadThread = new DownloadThread();
-//        downloadThread.setName("Download Thread");
-//        downloadThread.start();
-//        btDownload.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                downloadSongs();
-////                getLocation();
-//
-//            }
-//        });
-
-//        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
-//        mAdapter = new PlaylistAdapter(MainActivity.this, Playlist.songs);
-//        recyclerView.setAdapter(mAdapter);
-//        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-//        recyclerView.setLayoutManager(layoutManager);
-//        recyclerView.setHasFixedSize(true);
-//        recyclerView.setBackgroundResource(R.drawable.click_effet);
+//        arrayList = new ArrayList<>();
+//        arrayList.add("Library");
+//        arrayList.add("All Songs");
+//        arrayList.add("Love");
+//        LeftDrawerAdapter leftDrawerAdapter = new LeftDrawerAdapter(MainActivity.this, R.layout.item_left_drawer, arrayList);
+//        leftDrawer.setAdapter(leftDrawerAdapter);
         mLayout.addPanelSlideListener(new PanelSlideListener() {
             @Override
             public void onPanelSlide(View panel, float slideOffset) {
@@ -144,8 +116,7 @@ public class MainActivity extends ActionBarActivity implements SongListFragment.
         });
     }
 
-    //    //get location
-    private void getLocation() {
+    public void getLocation() {
         // Implicit intent
         Intent intentLocation = new Intent(Intent.ACTION_VIEW);
         Uri geoLocation = Uri.parse("geo:0,0?q=10.869852, 106.803376(University of Information Technology)");
@@ -160,17 +131,6 @@ public class MainActivity extends ActionBarActivity implements SongListFragment.
             startActivity(intentLocation);
     }
 
-//    private void downloadSongs() {
-//        dialogDownload.show();
-//        // Send Messages to Handler for processing
-//        for (Song song : Playlist.songs) {
-//            Intent bindIntent = new Intent(MainActivity.this, DownloadIntentService.class);
-//            bindIntent.putExtra(KEY_SONG, song);
-//            startService(bindIntent);
-//            Log.d(TAG, "startService() is called");
-//        }
-//    }
-
     private void addControls() {
 //        btDownload = (Button) findViewById(R.id.btDownload);
 //        dialogDownload = new ProgressDialog(MainActivity.this);
@@ -183,27 +143,25 @@ public class MainActivity extends ActionBarActivity implements SongListFragment.
 //                dialog.dismiss();
 //            }
 //        });
-
         rootActivityMainLayout = (RelativeLayout) findViewById(R.id.rootActivityMainLayout);
         mLayout = (SlidingUpPanelLayout) findViewById(R.id.sliding_layout);
         miniTitle = (TextView) findViewById(R.id.tvMiniTitle);
         miniArtis = (TextView) findViewById(R.id.tvMiniArtis);
         miniSongPic = (ImageView) findViewById(R.id.imgSongPic);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+//        leftDrawer = (ListView) findViewById(R.id.left_drawer);
 //        mVuMeterView = (VuMeterView) findViewById(R.id.vumeter);
 //        mVuMeterView.pause();
-        setToFullScreen();
-    }
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                MainActivity.this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.setDrawerListener(toggle);
+        toggle.syncState();
 
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        if (requestCode == 99 && resultCode == 100) {
-//            boolean isFavorite = data.getBooleanExtra(MainActivity.IS_FAVORITE, false);
-//            Playlist.songs[data.getIntExtra(MainActivity.LIST_POSITION, 0)].
-//                    setIsFavorite(isFavorite);
-//            mAdapter.notifyDataSetChanged();
-//        }
-//    }
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(MainActivity.this);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -214,31 +172,9 @@ public class MainActivity extends ActionBarActivity implements SongListFragment.
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemID = item.getItemId();
-//        if (itemID == R.id.nowPlaying) {
-//            getLocation();
-//        } else if (itemID == R.id.action_hide) {
-//            if (mLayout.getPanelState() == PanelState.COLLAPSED) {
-//                mLayout.setPanelState(PanelState.HIDDEN);
-//                item.setTitle("Open");
-//            } else {
-//                mLayout.setPanelState(PanelState.COLLAPSED);
-//                item.setTitle("Hide");
-//            }
-//        } else if{
-//
-//        }
         switch (itemID) {
             case R.id.nowPlaying:
-                getLocation();
-                break;
-            case R.id.action_hide:
-                if (mLayout.getPanelState() == PanelState.COLLAPSED) {
-                    mLayout.setPanelState(PanelState.HIDDEN);
-                    item.setTitle("Open");
-                } else {
-                    mLayout.setPanelState(PanelState.COLLAPSED);
-                    item.setTitle("Hide");
-                }
+                Toast.makeText(MainActivity.this, "You selected share song menu", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.action_share:
                 Toast.makeText(MainActivity.this, "You selected share song menu", Toast.LENGTH_SHORT).show();
@@ -246,6 +182,7 @@ public class MainActivity extends ActionBarActivity implements SongListFragment.
         }
         return super.onOptionsItemSelected(item);
     }
+
     private void setToFullScreen() {
         ViewGroup rootLayout = (ViewGroup) findViewById(R.id.sliding_layout);
         rootLayout.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE
@@ -255,11 +192,18 @@ public class MainActivity extends ActionBarActivity implements SongListFragment.
                 | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                 | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
     }
+
     @Override
     public void onBackPressed() {
         if (mLayout != null &&
                 (mLayout.getPanelState() == PanelState.EXPANDED || mLayout.getPanelState() == PanelState.ANCHORED)) {
             mLayout.setPanelState(PanelState.COLLAPSED);
+        } else {
+            super.onBackPressed();
+        }
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
         }
@@ -270,30 +214,6 @@ public class MainActivity extends ActionBarActivity implements SongListFragment.
         Animation effectOnclickAnimation = new AlphaAnimation(0.3f, 1.0f);
         effectOnclickAnimation.setDuration(500);
         v.startAnimation(effectOnclickAnimation);
-//        NowPlayingFragment savedNowPlayingFragment = (NowPlayingFragment) getSupportFragmentManager().findFragmentByTag(MainActivity.FRAGMENT_NOW_PLAYING);
-//        if (savedNowPlayingFragment == null) {
-//            NowPlayingFragment nowPlayingFragment = new NowPlayingFragment();
-//            Bundle bundle = new Bundle();
-//            bundle.putParcelable(MainActivity.SONG_NAME, Playlist.songs[index]);
-//            bundle.putInt(MainActivity.LIST_POSITION, index);
-//            nowPlayingFragment.setArguments(bundle);
-//            FragmentManager fragmentManager = getSupportFragmentManager();
-//            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//            fragmentTransaction.add(R.id.childPlaceHolder, nowPlayingFragment, MainActivity.FRAGMENT_NOW_PLAYING);
-//            fragmentTransaction.addToBackStack(null);
-//            fragmentTransaction.commit();
-//        } else {
-//            NowPlayingFragment nowPlayingFragment = new NowPlayingFragment();
-//            Bundle bundle = new Bundle();
-//            bundle.putParcelable(MainActivity.SONG_NAME, Playlist.songs[index]);
-//            bundle.putInt(MainActivity.LIST_POSITION, index);
-//            nowPlayingFragment.setArguments(bundle);
-//            FragmentManager fragmentManager = getSupportFragmentManager();
-//            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//            fragmentTransaction.replace(R.id.childPlaceHolder, nowPlayingFragment, MainActivity.FRAGMENT_NOW_PLAYING);
-//            fragmentTransaction.addToBackStack(null);
-//            fragmentTransaction.commit();
-//        }
         Log.d(TAG, "onItemClick");
         NowPlayingFragment nowPlayingFragment = new NowPlayingFragment();
         Bundle bundle = new Bundle();
@@ -305,19 +225,35 @@ public class MainActivity extends ActionBarActivity implements SongListFragment.
         fragmentTransaction.replace(R.id.childPlaceHolder, nowPlayingFragment, MainActivity.FRAGMENT_NOW_PLAYING);
         fragmentTransaction.commit();
     }
-//    @Override
-//    protected void onPause() {
-//        super.onPause();
-//        SharedPreferences preferences = getSharedPreferences(SAVING_MINISCREEN, Activity.MODE_PRIVATE);
-//        SharedPreferences.Editor editor = preferences.edit();
-//        editor.putString("title", miniTitle.getText().toString());
-//        editor.putString("artis", miniArtis.getText().toString());
-//        editor.commit();
-//    }
-//
+
     @Override
     protected void onResume() {
         super.onResume();
         setToFullScreen();
     }
+
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        // Handle navigation view item clicks here.
+        int id = item.getItemId();
+
+        if (id == R.id.nav_camera) {
+            // Handle the camera action
+        } else if (id == R.id.nav_gallery) {
+
+        } else if (id == R.id.nav_slideshow) {
+
+        } else if (id == R.id.nav_manage) {
+
+        } else if (id == R.id.nav_share) {
+
+        } else if (id == R.id.nav_send) {
+
+        }
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
+    }
+
 }
