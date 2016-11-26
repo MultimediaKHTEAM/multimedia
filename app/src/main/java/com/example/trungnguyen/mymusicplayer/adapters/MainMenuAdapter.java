@@ -30,28 +30,37 @@ public class MainMenuAdapter extends ArrayAdapter {
 
     @Override
     public View getView(int position, View view, ViewGroup viewGroup) {
+        MenuViewHolder holder;
         if (view == null) {
             view = LayoutInflater.from(getContext()).inflate(
                     R.layout.item_menu, viewGroup, false);
-        }
-        ImageView imgMenu = (ImageView) view.findViewById(R.id.imgMenu);
+            holder = new MenuViewHolder();
+            holder.tvMenuTitle = (TextView) view.findViewById(R.id.tvMenuTitleItem);
+            holder.imgMenu = (ImageView) view.findViewById(R.id.imgMenu);
+            holder.tvAccount = (TextView) view.findViewById(R.id.tvMenuAcountItem);
+            view.setTag(holder);
+        } else
+            holder = (MenuViewHolder) view.getTag();
         switch (arrayList.get(position)) {
             case "Songs":
-                imgMenu.setImageResource(R.drawable.music_circle_white);
+                holder.imgMenu.setImageResource(R.drawable.music_circle_white);
                 break;
             case "Albums":
-                imgMenu.setImageResource(R.drawable.album_white);
+                holder.imgMenu.setImageResource(R.drawable.album_white);
                 break;
             case "Artists":
-                imgMenu.setImageResource(R.drawable.account_white);
+                holder.imgMenu.setImageResource(R.drawable.account_white);
                 break;
             case "Favorites":
-                imgMenu.setImageResource(R.drawable.heart_white);
+                holder.imgMenu.setImageResource(R.drawable.heart_white);
         }
-        TextView tvMenuTitle = (TextView) view.findViewById(R.id.tvMenuTitleItem);
-        tvMenuTitle.setText(arrayList.get(position));
-        TextView tvAccount = (TextView) view.findViewById(R.id.tvMenuAcountItem);
-        tvAccount.setText("100");
+        holder.tvMenuTitle.setText(arrayList.get(position));
+        holder.tvAccount.setText("100");
         return view;
+    }
+
+    public class MenuViewHolder {
+        public ImageView imgMenu;
+        public TextView tvMenuTitle, tvAccount;
     }
 }

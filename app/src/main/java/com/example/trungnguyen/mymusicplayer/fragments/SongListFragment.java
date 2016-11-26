@@ -29,7 +29,7 @@ public class SongListFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        Log.d(TAG,"SongListFragment onCreateView");
+        Log.d(TAG, "SongListFragment onCreateView");
         OnSongItemSelectedInterface listener = (OnSongItemSelectedInterface) getActivity();
         View mReturnView = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_song_list, container, false);
         RecyclerView recyclerView = (RecyclerView) mReturnView.findViewById(R.id.recyclerView);

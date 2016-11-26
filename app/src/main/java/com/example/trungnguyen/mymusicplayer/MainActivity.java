@@ -58,6 +58,7 @@ public class MainActivity extends AppCompatActivity
     public static TextView miniTitle, miniArtis;
     public static ImageView miniSongPic;
     private Toolbar toolbar;
+    DrawerLayout drawer;
     //ArrayList<String> arrayList;
 //    private ListView leftDrawer;
 //    private PlaylistAdapter mAdapter;
@@ -153,7 +154,7 @@ public class MainActivity extends AppCompatActivity
 //        leftDrawer = (ListView) findViewById(R.id.left_drawer);
 //        mVuMeterView = (VuMeterView) findViewById(R.id.vumeter);
 //        mVuMeterView.pause();
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 MainActivity.this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
@@ -198,11 +199,7 @@ public class MainActivity extends AppCompatActivity
         if (mLayout != null &&
                 (mLayout.getPanelState() == PanelState.EXPANDED || mLayout.getPanelState() == PanelState.ANCHORED)) {
             mLayout.setPanelState(PanelState.COLLAPSED);
-        } else {
-            super.onBackPressed();
-        }
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
+        } else if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
@@ -211,20 +208,21 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onListSongItemSelected(int index, View v) {
+        NowPlayingFragment nowPlayingFragment = new NowPlayingFragment();
         Animation effectOnclickAnimation = new AlphaAnimation(0.3f, 1.0f);
         effectOnclickAnimation.setDuration(500);
         v.startAnimation(effectOnclickAnimation);
         Log.d(TAG, "onItemClick");
-        NowPlayingFragment nowPlayingFragment = new NowPlayingFragment();
         Bundle bundle = new Bundle();
         bundle.putParcelable(MainActivity.SONG_NAME, Playlist.songs[index]);
+        bundle.putInt("LIST_INDEX", index);
+        Log.d(TAG, index + "");
         bundle.putInt(MainActivity.LIST_POSITION, index);
         nowPlayingFragment.setArguments(bundle);
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.childPlaceHolder, nowPlayingFragment, MainActivity.FRAGMENT_NOW_PLAYING);
-        fragmentTransaction.commit();
-    }
+        fragmentTransaction.commit();    }
 
     @Override
     protected void onResume() {

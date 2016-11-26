@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -27,6 +28,7 @@ import java.util.ArrayList;
  * Created by Trung Nguyen on 11/24/2016.
  */
 public class LauchingFragment extends Fragment {
+    private static final String TAG = LauchingFragment.class.getSimpleName();
     ArrayList<String> arrayList;
 
     @Override

@@ -20,7 +20,6 @@ import java.util.List;
  */
 public class LeftDrawerAdapter extends ArrayAdapter {
     ArrayList<String> arrayList;
-
     public LeftDrawerAdapter(Context context, @LayoutRes int resource, @NonNull ArrayList<String> objects) {
         super(context, resource, objects);
         arrayList = objects;
@@ -28,23 +27,32 @@ public class LeftDrawerAdapter extends ArrayAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        LeftDrawerViewHolder holder;
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(
                     R.layout.item_left_drawer, parent, false);
-        }
-        ImageView imgLeftDrawer = (ImageView) convertView.findViewById(R.id.imgLeftDrawer);
+            holder = new LeftDrawerViewHolder();
+            holder.imgLeftDrawer = (ImageView) convertView.findViewById(R.id.imgLeftDrawer);
+            holder.tvLeft = (TextView) convertView.findViewById(R.id.tvLeftDrawerTitle);
+            convertView.setTag(holder);
+        } else
+            holder = (LeftDrawerViewHolder) convertView.getTag();
         switch (arrayList.get(position)) {
             case "Library":
-                imgLeftDrawer.setImageResource(R.drawable.albums_light);
+                holder.imgLeftDrawer.setImageResource(R.drawable.albums_light);
                 break;
             case "All Songs":
-                imgLeftDrawer.setImageResource(R.drawable.now_playing);
+                holder.imgLeftDrawer.setImageResource(R.drawable.now_playing);
                 break;
             case "Love":
-                imgLeftDrawer.setImageResource(R.drawable.heart_white);
+                holder.imgLeftDrawer.setImageResource(R.drawable.heart_white);
         }
-        TextView tvLeft = (TextView) convertView.findViewById(R.id.tvLeftDrawerTitle);
-        tvLeft.setText(arrayList.get(position));
+        holder.tvLeft.setText(arrayList.get(position));
         return convertView;
+    }
+
+    public class LeftDrawerViewHolder {
+        public ImageView imgLeftDrawer;
+        public TextView tvLeft;
     }
 }

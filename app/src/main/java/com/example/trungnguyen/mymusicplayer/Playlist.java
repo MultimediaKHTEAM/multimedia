@@ -7,8 +7,8 @@ import com.example.trungnguyen.mymusicplayer.models.Song;
  */
 public class Playlist {
     public static Song[] songs = {
-            new Song("http://s82.stream.nixcdn.com/a592cedc935f402ef87e7e8ab8a63544/5836c39f/NhacCuaTui929/PhiaSauMotCoGai-SoobinHoangSon-4632323.mp3", 1, "Phía Sau Một Cô Gái", 180, "Soobin Hoàng Sơn", "Label1", 2012, 100, false),
-            new Song("http://s82.stream.nixcdn.com/7670bb38c263917c44d77bccd7f3c0d8/5836c39f/NhacCuaTui926/VaTheLaHetLalalaVersion2-SoobinHoangSon-4539822.mp3", 2, "Làm Người Yêu Anh Nhé", 190, "3 Chú Bộ Đội", "Label2", 2005, 101, false),
+            new Song("http://f9.stream.nixcdn.com/73d84b9dcc071f43f9546717fa9721d2/58384ac9/NhacCuaTui931/Sut-TrongHieuIdolKarik-4659034.mp3", 1, "Phía Sau Một Cô Gái", 180, "Soobin Hoàng Sơn", "Label1", 2012, 100, false),
+            new Song("http://s82.stream.nixcdn.com/b5cfc39b6da719952ee45dbcb248642e/58384ac9/NhacCuaTui930/SayAh-TrongHieuIdol-4643030.mp3", 2, "Làm Người Yêu Anh Nhé", 190, "3 Chú Bộ Đội", "Label2", 2005, 101, false),
             new Song("http://f9.stream.nixcdn.com/419f01ff0c8df8f123219774dcf2e7f8/582ca3f0/NhacCuaTui931/LaiNhoNguoiYeu-DanNguyen-4632876.mp3", 3, "Nếu Lúc Ấy", 200, "Bang Kieu ft Van Mai Huong", "Label3", 2002, 102, false),
             new Song("http://zmp3-mp3-s1.zmp3-bdhcm-1.za.zdn.vn/6848a9e333a7daf983b6/6214618151873325179?key=Yk_nsEpgjkeO6m0aJ445wg&expires=1479317927", 4, "Mình Là Gì Của Nhau", 210, "Lou Hoang", "Label4", 2013, 103, false),
             new Song("http://s1.mp3.zdn.vn/357ceb7172359b6bc224/4706531562149718908?key=bflBhoIoAGH5diLiOJ9kdw&expires=1479316645", 5, "Gương Mặt Lạ Lẫm", 220, "Mr.Siro", "Label5", 1987, 104, false),

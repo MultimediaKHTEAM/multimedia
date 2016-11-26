@@ -15,12 +15,16 @@ import android.os.Messenger;
 import android.os.RemoteException;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -30,6 +34,7 @@ import com.example.trungnguyen.mymusicplayer.AlertDialog;
 import com.example.trungnguyen.mymusicplayer.MainActivity;
 import com.example.trungnguyen.mymusicplayer.PauseAbleAnimation;
 import com.example.trungnguyen.mymusicplayer.PlayerService;
+import com.example.trungnguyen.mymusicplayer.Playlist;
 import com.example.trungnguyen.mymusicplayer.R;
 import com.example.trungnguyen.mymusicplayer.managers.LastSongPreference;
 import com.example.trungnguyen.mymusicplayer.models.Song;
@@ -51,7 +56,7 @@ public class NowPlayingFragment extends Fragment {
     private TextView songTitle, songArtist;
     SeekBar seekBar;
     private Intent seekBarIntent;
-    private ImageView btnRepeat, imgLike;
+    private ImageView btnRepeat, imgLike, btSkipNext, btSkipPrevious;
     public ImageView imgPlayPause;
     private TextView tvMaxTime, tvCurPos;
     private boolean mBound = false;
@@ -62,6 +67,7 @@ public class NowPlayingFragment extends Fragment {
     int repeatCount = 0;
     private boolean isRepeatOne = false;
     private boolean isRepeatAll = false;
+    private int songIndex;
     BroadcastReceiver getMediaInfoReceive;
     ServiceConnection serviceConnection = new ServiceConnection() {
         @Override
@@ -100,66 +106,6 @@ public class NowPlayingFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "Now Playing Fragment onCreate");
-//        updateUIFromService();
-//        mSong = getArguments().getParcelable(MainActivity.SONG_NAME);
-//        if (getArguments().getParcelableArray(MainActivity.SONG_NAME) != null)
-//            songUrl = mSong.getmSongUrl();
-//        imgLike.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                if (!isLiked) {
-//                    imgLike.setImageResource(R.drawable.top_rated_light);
-//                    isLiked = true;
-//                } else {
-//                    isLiked = false;
-//                    imgLike.setImageResource(R.drawable.top_rated);
-//                }
-//            }
-//        });
-//        imgPlayPause.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                if (mBound) {
-//                    if (isNetworkAvailable()) {
-//                        Message message = Message.obtain();
-//                        message.arg1 = 2;
-//                        message.arg2 = 1;
-//                        message.replyTo = activityMessenger;
-//                        try {
-//                            playerMessenger.send(message);
-//                        } catch (RemoteException e) {
-//                            e.printStackTrace();
-//                        }
-//                    } else
-//                        alertUserAboutError();
-//                }
-//            }
-//        });
-//        btnRepeat.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                if (repeatCount == 2)
-//                    repeatCount = 0;
-//                else repeatCount++;
-//                if (repeatCount == 1) {
-//                    isRepeatAll = true;
-//                    isRepeatOne = false;
-//                    btnRepeat.setImageResource(R.drawable.btn_playback_repeat_all);
-//                } else if (repeatCount == 2) {
-//                    isRepeatOne = true;
-//                    isRepeatAll = false;
-//                    btnRepeat.setImageResource(R.drawable.btn_playback_repeat_one);
-//                } else {
-//                    isRepeatAll = false;
-//                    isRepeatOne = false;
-//                    btnRepeat.setImageResource(R.drawable.btn_playback_repeat);
-//                }
-//                Intent intent = new Intent("REPEAT");
-//                intent.putExtra("REPEAT_ALL", isRepeatAll);
-//                intent.putExtra("REPEAT_ONE", isRepeatOne);
-//                getActivity().sendBroadcast(intent);
-//            }
-//        });
     }
 
     @Nullable
@@ -178,60 +124,13 @@ public class NowPlayingFragment extends Fragment {
             else imgLike.setImageResource(R.drawable.heart_outline_small);
             songTitle.setText(mSong.getTitle());
             songArtist.setText(mSong.getArtist());
+            songIndex = getArguments().getInt("LIST_INDEX");
         }
-        imgLike.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (!mSong.isFavorite()) {
-                    imgLike.setImageResource(R.drawable.heart_white_small);
-                    mSong.setIsFavorite(true);
-                } else {
-                    imgLike.setImageResource(R.drawable.heart_outline_small);
-                    mSong.setIsFavorite(false);
-                }
-            }
-        });
-        imgPlayPause.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (mBound) {
-                    if (isNetworkAvailable()) {
-                        Message message = Message.obtain();
-                        message.arg1 = 2;
-                        message.arg2 = 1;
-                        message.replyTo = activityMessenger;
-                        try {
-                            playerMessenger.send(message);
-                        } catch (RemoteException e) {
-                            e.printStackTrace();
-                        }
-                    } else
-                        alertUserAboutError();
-                }
-            }
-        });
-        btnRepeat.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (repeatCount == 2)
-                    repeatCount = 0;
-                else repeatCount++;
-                if (repeatCount == 1) {
-                    isRepeatAll = true;
-                    isRepeatOne = false;
-                    btnRepeat.setImageResource(R.drawable.btn_playback_repeat_all);
-                } else if (repeatCount == 2) {
-                    isRepeatOne = true;
-                    isRepeatAll = false;
-                    btnRepeat.setImageResource(R.drawable.btn_playback_repeat_one);
-                } else {
-                    isRepeatAll = false;
-                    isRepeatOne = false;
-                    btnRepeat.setImageResource(R.drawable.btn_playback_repeat);
-                }
-                sendBroadcastRepeat();
-            }
-        });
+        ButtonSkipPreviousEvent();
+        ButtonLikeEvent();
+        ButtonPlayPauseEvent();
+        ButtonRepeatEvent();
+        ButtonSkipNextEvent();
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean fromUser) {
@@ -255,12 +154,115 @@ public class NowPlayingFragment extends Fragment {
         });
         return mReturnView;
     }
-    private void sendBroadcastRepeat(){
+
+    private void ButtonSkipPreviousEvent() {
+        btSkipPrevious.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                songIndex--;
+                NowPlayingFragment nowPlayingFragment = new NowPlayingFragment();
+                PlayNewSong(view, songIndex, nowPlayingFragment);
+            }
+        });
+    }
+
+    private void ButtonSkipNextEvent() {
+        btSkipNext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                songIndex++;
+                NowPlayingFragment nowPlayingFragment = new NowPlayingFragment();
+                PlayNewSong(view, songIndex, nowPlayingFragment);
+            }
+        });
+    }
+
+    public void PlayNewSong(View view, int skipIndex, NowPlayingFragment nowPlayingFragment) {
+        Animation effectOnclickAnimation = new AlphaAnimation(0.3f, 1.0f);
+        effectOnclickAnimation.setDuration(500);
+        view.startAnimation(effectOnclickAnimation);
+        Log.d(TAG, "onItemClick");
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(MainActivity.SONG_NAME, Playlist.songs[skipIndex]);
+        bundle.putInt("LIST_INDEX", skipIndex);
+        Log.d(TAG, skipIndex + "");
+        bundle.putInt(MainActivity.LIST_POSITION, skipIndex);
+        nowPlayingFragment.setArguments(bundle);
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.childPlaceHolder, nowPlayingFragment, MainActivity.FRAGMENT_NOW_PLAYING);
+        fragmentTransaction.commit();
+    }
+
+    private void ButtonPlayPauseEvent() {
+        imgPlayPause.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mBound) {
+                    if (isNetworkAvailable()) {
+                        Message message = Message.obtain();
+                        message.arg1 = 2;
+                        message.arg2 = 1;
+                        message.replyTo = activityMessenger;
+                        try {
+                            playerMessenger.send(message);
+                        } catch (RemoteException e) {
+                            e.printStackTrace();
+                        }
+                    } else
+                        alertUserAboutError();
+                }
+            }
+        });
+    }
+
+    private void ButtonRepeatEvent() {
+        btnRepeat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (repeatCount == 2)
+                    repeatCount = 0;
+                else repeatCount++;
+                if (repeatCount == 1) {
+                    isRepeatAll = true;
+                    isRepeatOne = false;
+                    btnRepeat.setImageResource(R.drawable.btn_playback_repeat_all);
+                } else if (repeatCount == 2) {
+                    isRepeatOne = true;
+                    isRepeatAll = false;
+                    btnRepeat.setImageResource(R.drawable.btn_playback_repeat_one);
+                } else {
+                    isRepeatAll = false;
+                    isRepeatOne = false;
+                    btnRepeat.setImageResource(R.drawable.btn_playback_repeat);
+                }
+                sendBroadcastRepeat();
+            }
+        });
+    }
+
+    private void ButtonLikeEvent() {
+        imgLike.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!mSong.isFavorite()) {
+                    imgLike.setImageResource(R.drawable.heart_white_small);
+                    mSong.setIsFavorite(true);
+                } else {
+                    imgLike.setImageResource(R.drawable.heart_outline_small);
+                    mSong.setIsFavorite(false);
+                }
+            }
+        });
+    }
+
+    private void sendBroadcastRepeat() {
         Intent intent = new Intent("REPEAT");
         intent.putExtra("REPEAT_ALL", isRepeatAll);
         intent.putExtra("REPEAT_ONE", isRepeatOne);
         getActivity().sendBroadcast(intent);
     }
+
     private void addControls(View mReturnView) {
         mVuMeterView = (VuMeterView) mReturnView.findViewById(R.id.vumeter);
         songTitle = (TextView) mReturnView.findViewById(R.id.tvMiniTitle);
@@ -271,9 +273,15 @@ public class NowPlayingFragment extends Fragment {
         tvMaxTime = (TextView) mReturnView.findViewById(R.id.tvMaxTime);
         tvCurPos = (TextView) mReturnView.findViewById(R.id.tvCurrentPosition);
         imgPlayPause = (ImageView) mReturnView.findViewById(R.id.btPlayPause);
+        imgPlayPause.setBackgroundResource(R.drawable.click_effet);
         imgLike = (ImageView) mReturnView.findViewById(R.id.btLike);
+        imgLike.setBackgroundResource(R.drawable.click_effet);
         initSmartTabSelector(mReturnView);
         seekBarIntent = new Intent(MainActivity.BROADCAST_SEEKBAR);
+        btSkipNext = (ImageView) mReturnView.findViewById(R.id.btSkipNext);
+        btSkipNext.setBackgroundResource(R.drawable.click_effet);
+        btSkipPrevious = (ImageView) mReturnView.findViewById(R.id.btSkipPrevious);
+        btSkipPrevious.setBackgroundResource(R.drawable.click_effet);
     }
 
     private void initSmartTabSelector(View mReturnView) {
@@ -394,7 +402,7 @@ public class NowPlayingFragment extends Fragment {
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver((stopMediaBroadcastReceive),
                 new IntentFilter(PlayerService.COPA_RESULT)
         );
-        if(songUrl == null) {
+        if (songUrl == null) {
             songUrl = LastSongPreference.getLastSongPlayingUrl(getActivity());
             songArtist.setText(LastSongPreference.getLastSongPlayingArtics(getActivity()));
             songTitle.setText(LastSongPreference.getLastSongPlayingTitle(getActivity()));

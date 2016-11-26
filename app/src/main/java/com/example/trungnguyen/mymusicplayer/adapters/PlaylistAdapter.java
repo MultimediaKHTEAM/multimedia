@@ -48,32 +48,20 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.SongVi
     public class SongViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         public TextView mTitleLabel;
-        public ImageView mFavIcon, imgIsPlaying;
+//        public ImageView mFavIcon, imgIsPlaying;
 
         public SongViewHolder(View itemView) {
             super(itemView);
             mTitleLabel = (TextView) itemView.findViewById(R.id.songTitleLabel);
-            mFavIcon = (ImageView) itemView.findViewById(R.id.favIcon);
-            imgIsPlaying = (ImageView) itemView.findViewById(R.id.imgPlayingNow);
             itemView.setOnClickListener(this);
         }
 
         public void bindSong(Song song) {
             mTitleLabel.setText(song.getTitle());
-//            if (song.isFavorite()) {
-//                mFavIcon.setVisibility(View.VISIBLE);
-//            } else {
-//                mFavIcon.setVisibility(View.INVISIBLE);
-//            }
-//            if (song.isPlaying()) {
-//                imgIsPlaying.setVisibility(View.VISIBLE);
-//            } else {
-//                imgIsPlaying.setVisibility(View.INVISIBLE);
-//            }
         }
         @Override
-        public void onClick(View v) {
-            mListener.onListSongItemSelected(getAdapterPosition(), v);
+        public void onClick(View view) {
+            mListener.onListSongItemSelected(getAdapterPosition(), view);
         }
     }
 }
