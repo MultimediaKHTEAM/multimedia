@@ -1,14 +1,18 @@
 package com.example.trungnguyen.mymusicplayer;
 
 import com.example.trungnguyen.mymusicplayer.models.Song;
+import com.example.trungnguyen.mymusicplayer.models.TopTracks;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Trung Nguyen on 11/5/2016.
  */
 public class Playlist {
     public static Song[] songs = {
-            new Song("http://f9.stream.nixcdn.com/73d84b9dcc071f43f9546717fa9721d2/58384ac9/NhacCuaTui931/Sut-TrongHieuIdolKarik-4659034.mp3", 1, "Phía Sau Một Cô Gái", 180, "Soobin Hoàng Sơn", "Label1", 2012, 100, false),
-            new Song("http://s82.stream.nixcdn.com/b5cfc39b6da719952ee45dbcb248642e/58384ac9/NhacCuaTui930/SayAh-TrongHieuIdol-4643030.mp3", 2, "Làm Người Yêu Anh Nhé", 190, "3 Chú Bộ Đội", "Label2", 2005, 101, false),
+            new Song("http://f9.stream.nixcdn.com/d66937dadea98affa753066796e4bd96/5839cd60/NhacCuaTui931/Sut-TrongHieuIdolKarik-4659034.mp3", 1, "Phía Sau Một Cô Gái", 180, "Soobin Hoàng Sơn", "Label1", 2012, 100, false),
+            new Song("http://s82.stream.nixcdn.com/641227391e3713421b1c89e24db6ad70/5839cd60/NhacCuaTui930/SayAh-TrongHieuIdol-4643030.mp3", 2, "Làm Người Yêu Anh Nhé", 190, "3 Chú Bộ Đội", "Label2", 2005, 101, false),
             new Song("http://f9.stream.nixcdn.com/419f01ff0c8df8f123219774dcf2e7f8/582ca3f0/NhacCuaTui931/LaiNhoNguoiYeu-DanNguyen-4632876.mp3", 3, "Nếu Lúc Ấy", 200, "Bang Kieu ft Van Mai Huong", "Label3", 2002, 102, false),
             new Song("http://zmp3-mp3-s1.zmp3-bdhcm-1.za.zdn.vn/6848a9e333a7daf983b6/6214618151873325179?key=Yk_nsEpgjkeO6m0aJ445wg&expires=1479317927", 4, "Mình Là Gì Của Nhau", 210, "Lou Hoang", "Label4", 2013, 103, false),
             new Song("http://s1.mp3.zdn.vn/357ceb7172359b6bc224/4706531562149718908?key=bflBhoIoAGH5diLiOJ9kdw&expires=1479316645", 5, "Gương Mặt Lạ Lẫm", 220, "Mr.Siro", "Label5", 1987, 104, false),
@@ -19,4 +23,6 @@ public class Playlist {
             new Song("http://zmp3-mp3-s1.r.za.zdn.vn/dbd3aeac37e8deb687f9/4385877938719831814?key=lsbY4ThgDnYtF61IJ_cAoQ&expires=1479318389", 10, "Loneliness", 240, "Loneliness", "Vietnam", 2016, 107, false),
             new Song("http://s1.mp3.zdn.vn/ef9ff4376d73842ddd62/6966070489983947677?key=0mq93qot4M73u2lcUp47Rg&expires=1479318329", 11, "Từng Ngày Em Mơ Về Anh", 240, "MLee - Soobin Hoang Son", "Vietnam", 2016, 107, false)
     };
+
+    public static List<TopTracks> topTracks;
 }

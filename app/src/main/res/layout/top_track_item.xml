@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="10dp"
+    android:background="#8d1717">
+    <ImageView
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:id="@+id/avatar"
+        android:src="@drawable/blank" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Track Title"
+        android:textSize="14sp"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="70dp"
+        android:id="@+id/tvTopTrackTitle"
+        android:textColor="#ffffff" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Track Artist"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="70dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="30dp"
+        android:id="@+id/tvTopTrackArtist"
+        android:textColor="#ffffff"
+        android:textSize="11sp" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="30dp"
+        android:id="@+id/playButton"
+        android:layout_centerVertical="true"
+        android:src="@android:drawable/ic_media_play" />
+</RelativeLayout>

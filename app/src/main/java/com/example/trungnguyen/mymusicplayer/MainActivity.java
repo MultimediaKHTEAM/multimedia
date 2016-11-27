@@ -32,6 +32,7 @@ import com.example.trungnguyen.mymusicplayer.adapters.PlaylistAdapter;
 import com.example.trungnguyen.mymusicplayer.fragments.LauchingFragment;
 import com.example.trungnguyen.mymusicplayer.fragments.NowPlayingFragment;
 import com.example.trungnguyen.mymusicplayer.fragments.SongListFragment;
+import com.example.trungnguyen.mymusicplayer.fragments.TopTracksFragment;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelSlideListener;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelState;
@@ -66,18 +67,19 @@ public class MainActivity extends AppCompatActivity
 //    public static VuMeterView mVuMeterView;
     public static final String FRAGMENT_SONG_LIST = "fragment_song_list";
     public static final String LAUCHING_FRAGMENT = "lauching_fragment";
+    public static final String TOP_TRACK_FRAGMENT = "top_online_songs";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Log.d(TAG, "onCreate - MainActivity");
-        LauchingFragment savedFragment = (LauchingFragment) getSupportFragmentManager().findFragmentByTag(LAUCHING_FRAGMENT);
+        TopTracksFragment savedFragment = (TopTracksFragment) getSupportFragmentManager().findFragmentByTag(TOP_TRACK_FRAGMENT);
         if (savedFragment == null) {
-            LauchingFragment lauchingFragment = new LauchingFragment();
+            TopTracksFragment lauchingFragment = new TopTracksFragment();
             FragmentManager fragmentManager = getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.add(R.id.placeHolder, lauchingFragment, LAUCHING_FRAGMENT);
+            fragmentTransaction.add(R.id.placeHolder, lauchingFragment, TOP_TRACK_FRAGMENT);
             fragmentTransaction.commit();
         }
         NowPlayingFragment nowPlayingFragment1 = (NowPlayingFragment) getSupportFragmentManager().findFragmentByTag(FRAGMENT_NOW_PLAYING);
@@ -92,12 +94,6 @@ public class MainActivity extends AppCompatActivity
             fragmentTransaction.commit();
         }
         addControls();
-//        arrayList = new ArrayList<>();
-//        arrayList.add("Library");
-//        arrayList.add("All Songs");
-//        arrayList.add("Love");
-//        LeftDrawerAdapter leftDrawerAdapter = new LeftDrawerAdapter(MainActivity.this, R.layout.item_left_drawer, arrayList);
-//        leftDrawer.setAdapter(leftDrawerAdapter);
         mLayout.addPanelSlideListener(new PanelSlideListener() {
             @Override
             public void onPanelSlide(View panel, float slideOffset) {
@@ -222,7 +218,8 @@ public class MainActivity extends AppCompatActivity
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.childPlaceHolder, nowPlayingFragment, MainActivity.FRAGMENT_NOW_PLAYING);
-        fragmentTransaction.commit();    }
+        fragmentTransaction.commit();
+    }
 
     @Override
     protected void onResume() {
@@ -235,10 +232,19 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
+        if (id == R.id.top_tracks) {
+            TopTracksFragment topTracksFragment = new TopTracksFragment();
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.placeHolder, topTracksFragment, TOP_TRACK_FRAGMENT);
+            fragmentTransaction.commit();
         } else if (id == R.id.nav_gallery) {
-
+            LauchingFragment lauchingFragment = new LauchingFragment();
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.placeHolder, lauchingFragment, LAUCHING_FRAGMENT);
+            fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.commit();
         } else if (id == R.id.nav_slideshow) {
 
         } else if (id == R.id.nav_manage) {

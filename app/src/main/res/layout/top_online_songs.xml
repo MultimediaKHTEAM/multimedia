@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+    <RelativeLayout android:id="@+id/RelativeLayout01"
+        android:layout_width="match_parent"
+        android:layout_height="65dp">
+        <Spinner android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:id="@+id/spinnerCountry"
+            android:layout_toLeftOf="@+id/btnGetTrack"
+            android:layout_toStartOf="@+id/btnGetTrack"
+            android:entries="@array/metros">
+        </Spinner>
+        <Button android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:id="@+id/btnGetTrack"
+            android:text="@string/track_button_label"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            >
+        </Button>
+    </RelativeLayout>
+
+    <ListView android:id="@+id/lvTopTrack"
+        android:choiceMode="singleChoice"
+        android:smoothScrollbar="false"
+        android:layout_weight="1"
+        android:layout_width="wrap_content"
+        android:layout_height="0dip"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:clickable="true">
+    </ListView>
+</LinearLayout>

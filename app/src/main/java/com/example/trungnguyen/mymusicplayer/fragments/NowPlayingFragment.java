@@ -51,24 +51,23 @@ import io.gresse.hugo.vumeterlibrary.VuMeterView;
  */
 public class NowPlayingFragment extends Fragment {
     private static final String TAG = NowPlayingFragment.class.getSimpleName();
-    private Song mSong;
     public VuMeterView mVuMeterView;
-    private TextView songTitle, songArtist;
     SeekBar seekBar;
     private Intent seekBarIntent;
     private ImageView btnRepeat, imgLike, btSkipNext, btSkipPrevious;
     public ImageView imgPlayPause;
-    private TextView tvMaxTime, tvCurPos;
+    private TextView tvMaxTime, tvCurPos, songTitle, songArtist;
     private boolean mBound = false;
     private Messenger activityMessenger = new Messenger(new ActivityHandler(this));
     private Messenger playerMessenger;
     private String songUrl = null;
-    private boolean isLiked = false;
-    int repeatCount = 0;
+    private int repeatCount = 0;
+    Song mSong;
     private boolean isRepeatOne = false;
     private boolean isRepeatAll = false;
     private int songIndex;
     BroadcastReceiver getMediaInfoReceive;
+    // onServices connected and disconnected
     ServiceConnection serviceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
@@ -118,19 +117,25 @@ public class NowPlayingFragment extends Fragment {
         addControls(mReturnView);
         if (getArguments().getParcelable(MainActivity.SONG_NAME) != null) {
             mSong = getArguments().getParcelable(MainActivity.SONG_NAME);
+            songIndex = getArguments().getInt("LIST_INDEX");
+        } else {
+            mSong = LastSongPreference.getLastSong(getActivity());
+            songIndex = LastSongPreference.getLastSongPlayingIndex(getActivity());
+        }
+        if (mSong != null) {
             songUrl = mSong.getmSongUrl();
             if (mSong.isFavorite())
                 imgLike.setImageResource(R.drawable.heart_white_small);
             else imgLike.setImageResource(R.drawable.heart_outline_small);
             songTitle.setText(mSong.getTitle());
             songArtist.setText(mSong.getArtist());
-            songIndex = getArguments().getInt("LIST_INDEX");
+            ButtonSkipPreviousEvent();
+            ButtonLikeEvent();
+            ButtonSkipNextEvent();
         }
-        ButtonSkipPreviousEvent();
-        ButtonLikeEvent();
         ButtonPlayPauseEvent();
         ButtonRepeatEvent();
-        ButtonSkipNextEvent();
+        //On Seek bar progress changed
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean fromUser) {
@@ -160,8 +165,10 @@ public class NowPlayingFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 songIndex--;
-                NowPlayingFragment nowPlayingFragment = new NowPlayingFragment();
-                PlayNewSong(view, songIndex, nowPlayingFragment);
+                if (songIndex >= 0) {
+                    NowPlayingFragment nowPlayingFragment = new NowPlayingFragment();
+                    PlayNewSong(view, songIndex, nowPlayingFragment);
+                }
             }
         });
     }
@@ -171,8 +178,10 @@ public class NowPlayingFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 songIndex++;
-                NowPlayingFragment nowPlayingFragment = new NowPlayingFragment();
-                PlayNewSong(view, songIndex, nowPlayingFragment);
+                if (songIndex <= Playlist.songs.length) {
+                    NowPlayingFragment nowPlayingFragment = new NowPlayingFragment();
+                    PlayNewSong(view, songIndex, nowPlayingFragment);
+                }
             }
         });
     }
@@ -186,7 +195,6 @@ public class NowPlayingFragment extends Fragment {
         bundle.putParcelable(MainActivity.SONG_NAME, Playlist.songs[skipIndex]);
         bundle.putInt("LIST_INDEX", skipIndex);
         Log.d(TAG, skipIndex + "");
-        bundle.putInt(MainActivity.LIST_POSITION, skipIndex);
         nowPlayingFragment.setArguments(bundle);
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -223,20 +231,7 @@ public class NowPlayingFragment extends Fragment {
                 if (repeatCount == 2)
                     repeatCount = 0;
                 else repeatCount++;
-                if (repeatCount == 1) {
-                    isRepeatAll = true;
-                    isRepeatOne = false;
-                    btnRepeat.setImageResource(R.drawable.btn_playback_repeat_all);
-                } else if (repeatCount == 2) {
-                    isRepeatOne = true;
-                    isRepeatAll = false;
-                    btnRepeat.setImageResource(R.drawable.btn_playback_repeat_one);
-                } else {
-                    isRepeatAll = false;
-                    isRepeatOne = false;
-                    btnRepeat.setImageResource(R.drawable.btn_playback_repeat);
-                }
-                sendBroadcastRepeat();
+                setRepeatButton(repeatCount);
             }
         });
     }
@@ -359,7 +354,11 @@ public class NowPlayingFragment extends Fragment {
         super.onResume();
         Log.d(TAG, "Now Playing Fragment onResume");
         repeatCount = LastSongPreference.getLastRepeatCount(getActivity());
-        switch (repeatCount) {
+        setRepeatButton(repeatCount);
+    }
+
+    private void setRepeatButton(int repeatCountTem) {
+        switch (repeatCountTem) {
             case 0:
                 btnRepeat.setImageResource(R.drawable.btn_playback_repeat);
                 isRepeatAll = false;
@@ -402,11 +401,6 @@ public class NowPlayingFragment extends Fragment {
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver((stopMediaBroadcastReceive),
                 new IntentFilter(PlayerService.COPA_RESULT)
         );
-        if (songUrl == null) {
-            songUrl = LastSongPreference.getLastSongPlayingUrl(getActivity());
-            songArtist.setText(LastSongPreference.getLastSongPlayingArtics(getActivity()));
-            songTitle.setText(LastSongPreference.getLastSongPlayingTitle(getActivity()));
-        }
         Intent intent = new Intent(getActivity(), PlayerService.class);
         if (songUrl != null)
             getActivity().bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
@@ -414,15 +408,13 @@ public class NowPlayingFragment extends Fragment {
 
     @Override
     public void onStop() {
-        super.onStop();
         if (mBound) {
             getActivity().unbindService(serviceConnection);
             mBound = false;
         }
-        if (getArguments().getParcelable(MainActivity.SONG_NAME) != null) {
-            LastSongPreference.saveLastSongPlayingUrl(getActivity(), mSong.getmSongUrl());
-            LastSongPreference.saveLastSongPlayingTitle(getActivity(), mSong.getTitle());
-            LastSongPreference.saveLastSongPlayingArtics(getActivity(), mSong.getArtist());
-        }
+        LastSongPreference.saveLastSong(getActivity(), mSong);
+        LastSongPreference.saveLastSongPlayingIndex(getActivity(), songIndex);
+        Log.d(TAG, "Saved last song by SharedPreferences");
+        super.onStop();
     }
 }

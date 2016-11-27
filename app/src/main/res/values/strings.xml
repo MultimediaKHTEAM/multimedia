@@ -5,4 +5,14 @@
     <string name="now_playing">now_playing</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="track_button_label">Get Top Tracks</string>
+    <string-array name="metros">
+        <item>Denver</item>
+        <item>Detroit</item>
+        <item>Miami</item>
+        <item>Orlando</item>
+        <item>Phoenix</item>
+        <item>Sacramento</item>
+        <item>Seattle</item>
+    </string-array>
 </resources>

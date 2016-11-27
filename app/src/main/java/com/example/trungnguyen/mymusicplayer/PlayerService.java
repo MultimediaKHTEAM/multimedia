@@ -31,7 +31,7 @@ public class PlayerService extends Service {
     private static final String TAG = PlayerService.class.getSimpleName();
     Handler handler = new Handler();
     public static final String UPDATE_SEEKBAR = "com.example.trungnguyen.mymusicplayer.PlayerService.SEEKBAR_UPDATE";
-    private MediaPlayer mediaPlayer, mediaPlayer2;
+    private MediaPlayer mediaPlayer;
     static final public String COPA_RESULT = "com.example.trungnguyen.mymusicplayer.PlayerService.REQUEST_PROCESSED";
     private final boolean isStop = true;
     static final public String COPA_MESSAGE = "listen_for_stop_media";
