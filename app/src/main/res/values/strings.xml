@@ -6,6 +6,7 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="track_button_label">Get Top Tracks</string>
+    <string name="hint_search">Hint Search</string>
     <string-array name="metros">
         <item>Denver</item>
         <item>Detroit</item>

@@ -1,0 +1,7 @@
+<searchable xmlns:android="http://schemas.android.com/apk/res/android"
+    android:hint="@string/hint_search"
+    android:label="@string/app_name"
+    android:voiceSearchMode="showVoiceSearchButton|launchRecognizer"
+    android:searchSuggestAuthority="com.example.trungnguyen.myapplication.providers.SearchingTrackProvider"
+    android:searchSuggestIntentAction="android.intent.action.VIEW"
+    android:searchSuggestIntentData=""/>

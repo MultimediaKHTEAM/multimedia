@@ -23,11 +23,11 @@ import java.util.List;
 /**
  * Created by Trung Nguyen on 11/27/2016.
  */
-public class TopTrackListAdapter extends ArrayAdapter<TopTracks> {
+public class SearchingListAdapter extends ArrayAdapter<TopTracks> {
     List<TopTracks> mTopTrack;
     Context mContext;
 
-    public TopTrackListAdapter(Context context, @LayoutRes int resource, @NonNull List<TopTracks> objects) {
+    public SearchingListAdapter(Context context, @LayoutRes int resource, @NonNull List<TopTracks> objects) {
         super(context, resource, objects);
         mContext = context;
         mTopTrack = objects;
@@ -35,9 +35,9 @@ public class TopTrackListAdapter extends ArrayAdapter<TopTracks> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        TopTrackViewHolder holder;
+        SearchingHolder holder;
         if (convertView == null) {
-            holder = new TopTrackViewHolder();
+            holder = new SearchingHolder();
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.top_track_item, parent, false);
             holder.avarta = (ImageView) convertView.findViewById(R.id.avatar);
             holder.title = (TextView) convertView.findViewById(R.id.tvTopTrackTitle);
@@ -45,7 +45,7 @@ public class TopTrackListAdapter extends ArrayAdapter<TopTracks> {
             holder.btPlay = (ImageView) convertView.findViewById(R.id.playButton);
             convertView.setTag(holder);
         } else {
-            holder = (TopTrackViewHolder) convertView.getTag();
+            holder = (SearchingHolder) convertView.getTag();
         }
         holder.title.setText(mTopTrack.get(position).getTopTrackName());
         holder.artist.setText(mTopTrack.get(position).getArtist());
@@ -54,7 +54,7 @@ public class TopTrackListAdapter extends ArrayAdapter<TopTracks> {
         return convertView;
     }
 
-    public class TopTrackViewHolder {
+    public class SearchingHolder {
         ImageView avarta;
         TextView title, artist;
         ImageView btPlay;

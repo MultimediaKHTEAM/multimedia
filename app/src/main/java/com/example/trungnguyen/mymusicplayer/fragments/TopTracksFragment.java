@@ -1,5 +1,7 @@
 package com.example.trungnguyen.mymusicplayer.fragments;
 
+import android.app.SearchManager;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -55,10 +57,11 @@ public class TopTracksFragment extends Fragment {
                 TextView tvCountry = (TextView) spinnerCountry.getSelectedView();
                 String country = tvCountry.getText().toString();
                 LastFMHelper lastFMHelper = new LastFMHelper(country);
-                String urlTopTrack = lastFMHelper.getUrl();
+                String urlTopTrack = lastFMHelper.getTopTrackUrl();
                 getTracks(urlTopTrack);
             }
         });
+
         return mView;
     }
 

@@ -1,6 +1,9 @@
 package com.example.trungnguyen.mymusicplayer;
 
 import android.app.ProgressDialog;
+import android.app.SearchManager;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.design.widget.NavigationView;
@@ -8,10 +11,12 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -31,6 +36,7 @@ import android.widget.Toast;
 import com.example.trungnguyen.mymusicplayer.adapters.PlaylistAdapter;
 import com.example.trungnguyen.mymusicplayer.fragments.LauchingFragment;
 import com.example.trungnguyen.mymusicplayer.fragments.NowPlayingFragment;
+import com.example.trungnguyen.mymusicplayer.fragments.SearchingFragment;
 import com.example.trungnguyen.mymusicplayer.fragments.SongListFragment;
 import com.example.trungnguyen.mymusicplayer.fragments.TopTracksFragment;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
@@ -44,14 +50,13 @@ import io.gresse.hugo.vumeterlibrary.VuMeterView;
 
 public class MainActivity extends AppCompatActivity
         implements SongListFragment.OnSongItemSelectedInterface,
-        NavigationView.OnNavigationItemSelectedListener {
+        NavigationView.OnNavigationItemSelectedListener, SearchView.OnQueryTextListener {
     public static final String SONG_NAME = "song_name";
     public static final String LIST_POSITION = "list_pos";
-    public static final String IS_FAVORITE = "is_favorite";
     public static final String KEY_SONG = "song";
     public static final String BROADCAST_SEEKBAR = "com.example.trungnguyen.mymusicplayer.sendseekbar";
-    private static final String SAVING_MINISCREEN = "SAVING_MINISCREEN";
     public static final String FRAGMENT_NOW_PLAYING = "fragment_playing_song";
+    private static final String SEACHING_FRAGMENT = "searching_fragment";
     private RelativeLayout rootActivityMainLayout;
     protected static SlidingUpPanelLayout mLayout;
     private static final String TAG = MainActivity.class.getSimpleName();
@@ -163,22 +168,44 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
-        return super.onCreateOptionsMenu(menu);
+        MenuItem searchItem = menu.findItem(R.id.search);
+        SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        searchView.setOnQueryTextListener(this);
+
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(
+                new ComponentName(this, MainActivity.class)));
+        searchView.setIconifiedByDefault(false);
+        return true;
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        SearchingFragment searchingFragment = new SearchingFragment();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.placeHolder, searchingFragment, SEACHING_FRAGMENT);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+        return true;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        return false;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemID = item.getItemId();
         switch (itemID) {
-            case R.id.nowPlaying:
-                Toast.makeText(MainActivity.this, "You selected share song menu", Toast.LENGTH_SHORT).show();
-                break;
             case R.id.action_share:
                 Toast.makeText(MainActivity.this, "You selected share song menu", Toast.LENGTH_SHORT).show();
                 break;
         }
         return super.onOptionsItemSelected(item);
     }
+
 
     private void setToFullScreen() {
         ViewGroup rootLayout = (ViewGroup) findViewById(R.id.sliding_layout);
