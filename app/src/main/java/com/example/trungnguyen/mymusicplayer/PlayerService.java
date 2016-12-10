@@ -64,7 +64,7 @@ public class PlayerService extends Service {
     @Override
     public int onStartCommand(final Intent intent, int flags, int startId) {
         Notification.Builder notificationBuilder = new Notification.Builder(this);
-        notificationBuilder.setSmallIcon(R.mipmap.ic_launcher);
+        notificationBuilder.setSmallIcon(R.mipmap.ic_launcher_music);
         Notification notification = notificationBuilder.build();
         startForeground(11, notification);
 
@@ -72,11 +72,12 @@ public class PlayerService extends Service {
             @Override
             public void onCompletion(MediaPlayer mediaPlayer) {
                 Log.d(TAG, "CALL COMPLETION MEDIA");
-                sendStopMediaResult(isStop);
-                if (!isRepeatOne) {
+                if (!isRepeatOne && !isRepeatAll) {
                     mediaPlayer.setLooping(false);
                     stopSelf();
                     stopForeground(true);
+                } else if (isRepeatAll && !isRepeatOne) {
+                    sendStopMediaResult(true);
                 }
             }
         });
@@ -87,6 +88,7 @@ public class PlayerService extends Service {
     private void sendStopMediaResult(boolean isStopped) {
         Intent intent = new Intent(COPA_RESULT);
         intent.putExtra(COPA_MESSAGE, isStopped);
+        intent.putExtra("IS_REPEAT_ALL", isRepeatAll);
         localBroadCastManager.sendBroadcast(intent);
     }
 
@@ -137,8 +139,10 @@ public class PlayerService extends Service {
         public void onReceive(Context context, Intent intent) {
             isRepeatAll = intent.getBooleanExtra("REPEAT_ALL", false);
             isRepeatOne = intent.getBooleanExtra("REPEAT_ONE", false);
-            if (!isRepeatAll && isRepeatOne)
-                mediaPlayer.setLooping(isRepeatOne);
+            if (isRepeatOne && !isRepeatAll)
+                mediaPlayer.setLooping(true);
+            else if (!isRepeatOne)
+                mediaPlayer.setLooping(false);
         }
     };
 

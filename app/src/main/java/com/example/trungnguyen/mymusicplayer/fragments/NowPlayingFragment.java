@@ -125,8 +125,8 @@ public class NowPlayingFragment extends Fragment {
         if (mSong != null) {
             songUrl = mSong.getmSongUrl();
             if (mSong.isFavorite())
-                imgLike.setImageResource(R.drawable.heart_white_small);
-            else imgLike.setImageResource(R.drawable.heart_outline_small);
+                imgLike.setImageResource(R.drawable.thumb_up);
+            else imgLike.setImageResource(R.drawable.thumb_up_outline);
             songTitle.setText(mSong.getTitle());
             songArtist.setText(mSong.getArtist());
             ButtonSkipPreviousEvent();
@@ -164,10 +164,13 @@ public class NowPlayingFragment extends Fragment {
         btSkipPrevious.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Animation effectOnclickAnimation = new AlphaAnimation(0.3f, 1.0f);
+                effectOnclickAnimation.setDuration(500);
+                view.startAnimation(effectOnclickAnimation);
                 songIndex--;
                 if (songIndex >= 0) {
                     NowPlayingFragment nowPlayingFragment = new NowPlayingFragment();
-                    PlayNewSong(view, songIndex, nowPlayingFragment);
+                    PlayNewSong(songIndex, nowPlayingFragment);
                 }
             }
         });
@@ -177,19 +180,19 @@ public class NowPlayingFragment extends Fragment {
         btSkipNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Animation effectOnclickAnimation = new AlphaAnimation(0.3f, 1.0f);
+                effectOnclickAnimation.setDuration(500);
+                view.startAnimation(effectOnclickAnimation);
                 songIndex++;
                 if (songIndex <= Playlist.songs.length) {
                     NowPlayingFragment nowPlayingFragment = new NowPlayingFragment();
-                    PlayNewSong(view, songIndex, nowPlayingFragment);
+                    PlayNewSong(songIndex, nowPlayingFragment);
                 }
             }
         });
     }
 
-    public void PlayNewSong(View view, int skipIndex, NowPlayingFragment nowPlayingFragment) {
-        Animation effectOnclickAnimation = new AlphaAnimation(0.3f, 1.0f);
-        effectOnclickAnimation.setDuration(500);
-        view.startAnimation(effectOnclickAnimation);
+    public void PlayNewSong(int skipIndex, NowPlayingFragment nowPlayingFragment) {
         Log.d(TAG, "onItemClick");
         Bundle bundle = new Bundle();
         bundle.putParcelable(MainActivity.SONG_NAME, Playlist.songs[skipIndex]);
@@ -241,10 +244,10 @@ public class NowPlayingFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 if (!mSong.isFavorite()) {
-                    imgLike.setImageResource(R.drawable.heart_white_small);
+                    imgLike.setImageResource(R.drawable.thumb_up);
                     mSong.setIsFavorite(true);
                 } else {
-                    imgLike.setImageResource(R.drawable.heart_outline_small);
+                    imgLike.setImageResource(R.drawable.thumb_up_outline);
                     mSong.setIsFavorite(false);
                 }
             }
@@ -269,7 +272,7 @@ public class NowPlayingFragment extends Fragment {
         tvCurPos = (TextView) mReturnView.findViewById(R.id.tvCurrentPosition);
         imgPlayPause = (ImageView) mReturnView.findViewById(R.id.btPlayPause);
         imgPlayPause.setBackgroundResource(R.drawable.click_effet);
-        imgLike = (ImageView) mReturnView.findViewById(R.id.btLike);
+        imgLike = (ImageView) mReturnView.findViewById(R.id.imgLove);
         imgLike.setBackgroundResource(R.drawable.click_effet);
         initSmartTabSelector(mReturnView);
         seekBarIntent = new Intent(MainActivity.BROADCAST_SEEKBAR);
@@ -298,7 +301,15 @@ public class NowPlayingFragment extends Fragment {
         @Override
         public void onReceive(Context context, Intent intentStopMedia) {
             final boolean isStopped = intentStopMedia.getBooleanExtra(PlayerService.COPA_MESSAGE, false);
+            boolean repeatAll = intentStopMedia.getBooleanExtra("IS_REPEAT_ALL", false);
             ChangeButton(isStopped);
+            songIndex++;
+            if (songIndex > 2) songIndex = 0;
+            if (repeatAll) {
+                NowPlayingFragment nowPlayingFragment = new NowPlayingFragment();
+                PlayNewSong(songIndex, nowPlayingFragment);
+
+            }
             mVuMeterView.pause();
         }
     };

@@ -3,6 +3,7 @@ package com.example.trungnguyen.mymusicplayer.fragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -13,6 +14,10 @@ import android.view.ViewGroup;
 import com.example.trungnguyen.mymusicplayer.Playlist;
 import com.example.trungnguyen.mymusicplayer.R;
 import com.example.trungnguyen.mymusicplayer.adapters.PlaylistAdapter;
+import com.ogaclejapan.smarttablayout.SmartTabLayout;
+import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItem;
+import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItemAdapter;
+import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItems;
 
 /**
  * Created by Trung Nguyen on 11/21/2016.
@@ -24,21 +29,27 @@ public class SongListFragment extends Fragment {
         void onListSongItemSelected(int index, View v);
     }
 
-    private PlaylistAdapter mAdapter;
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         Log.d(TAG, "SongListFragment onCreateView");
-        OnSongItemSelectedInterface listener = (OnSongItemSelectedInterface) getActivity();
         View mReturnView = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_song_list, container, false);
-        RecyclerView recyclerView = (RecyclerView) mReturnView.findViewById(R.id.recyclerView);
-        mAdapter = new PlaylistAdapter(getActivity(), Playlist.songs, listener);
-        recyclerView.setAdapter(mAdapter);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setBackgroundResource(R.drawable.click_effet);
+
+        FragmentPagerItemAdapter adapter = new FragmentPagerItemAdapter(
+                getChildFragmentManager(),
+                FragmentPagerItems.with(getActivity())
+                        .add("TRACKS", TrackListFragment.class)
+                        .add("ALBUMS", LyrisFragment.class)
+                        .add("ARTISTS", LyrisFragment.class)
+                        .add("FAVORITE", LyrisFragment.class)
+                        .create());
+        Log.d(TAG, getArguments().getInt(LauchingFragment.PAGE_POSiTION) + "");
+        ViewPager viewPager = (ViewPager) mReturnView.findViewById(R.id.viewpager1);
+        viewPager.setAdapter(adapter);
+        viewPager.setCurrentItem(getArguments().getInt(LauchingFragment.PAGE_POSiTION));
+        SmartTabLayout viewPagerTab = (SmartTabLayout) mReturnView.findViewById(R.id.viewpagertab1);
+        viewPagerTab.setViewPager(viewPager);
+
         return mReturnView;
     }
 }

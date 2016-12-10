@@ -79,12 +79,12 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Log.d(TAG, "onCreate - MainActivity");
-        TopTracksFragment savedFragment = (TopTracksFragment) getSupportFragmentManager().findFragmentByTag(TOP_TRACK_FRAGMENT);
+        LauchingFragment savedFragment = (LauchingFragment) getSupportFragmentManager().findFragmentByTag(LAUCHING_FRAGMENT);
         if (savedFragment == null) {
-            TopTracksFragment lauchingFragment = new TopTracksFragment();
+            LauchingFragment lauchingFragment = new LauchingFragment();
             FragmentManager fragmentManager = getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.add(R.id.placeHolder, lauchingFragment, TOP_TRACK_FRAGMENT);
+            fragmentTransaction.add(R.id.placeHolder, lauchingFragment, LAUCHING_FRAGMENT);
             fragmentTransaction.commit();
         }
         NowPlayingFragment nowPlayingFragment1 = (NowPlayingFragment) getSupportFragmentManager().findFragmentByTag(FRAGMENT_NOW_PLAYING);
@@ -199,7 +199,7 @@ public class MainActivity extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemID = item.getItemId();
         switch (itemID) {
-            case R.id.action_share:
+            case R.id.set_timer:
                 Toast.makeText(MainActivity.this, "You selected share song menu", Toast.LENGTH_SHORT).show();
                 break;
         }

@@ -13,6 +13,10 @@ public class LastFMHelper {
 
     public static final String suffix = "&api_key=eb45a5debb542128737f9c10028ddbaf&format=json";
 
+    public static final String artistPrefix = "http://ws.audioscrobbler.com/2.0/?method=artist.search&artist=";
+
+    public static final String artistSuffix = "&api_key=eb45a5debb542128737f9c10028ddbaf&format=json";
+
     public LastFMHelper(String string) {
         mString = string;
     }
@@ -24,6 +28,11 @@ public class LastFMHelper {
 
     public String getSearchingUrl() {
         String url =  prefix + mString + suffix;
+        return url;
+    }
+
+    public String getArtistSearchingUrl(){
+        String url =  artistPrefix + mString + artistSuffix;
         return url;
     }
 

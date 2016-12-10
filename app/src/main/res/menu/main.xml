@@ -9,8 +9,8 @@
         app:actionViewClass="android.support.v7.widget.SearchView" />
 
     <item
-        android:id="@+id/action_share"
-        android:title="Share Song"
+        android:id="@+id/set_timer"
+        android:title="Set Timer"
         android:orderInCategory="100">
     </item>
     <item

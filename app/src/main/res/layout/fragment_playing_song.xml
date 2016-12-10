@@ -144,14 +144,44 @@
         android:layout_marginLeft="50dp"
         android:src="@drawable/ic_skip_previous_white_48dp" />
 
-    <ImageView
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/btLike"
-        android:layout_centerHorizontal="true"
+        android:id="@+id/buttonLayout"
         android:layout_below="@+id/viewpager"
-        android:layout_marginTop="15dp"
-        android:src="@drawable/heart_outline_small" />
+        android:layout_marginTop="35dp">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:id="@+id/imgAdd"
+            android:layout_marginLeft="20dp"
+            android:src="@drawable/plus" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="130dp"
+            android:id="@+id/imgShare"
+            android:src="@drawable/share" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:id="@+id/imgLove"
+            android:layout_marginRight="20dp"
+            android:src="@drawable/thumb_up" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="130dp"
+            android:id="@+id/imgDownload"
+            android:src="@drawable/download" />
+    </RelativeLayout>
     <com.ogaclejapan.smarttablayout.SmartTabLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"

@@ -29,6 +29,7 @@ import java.util.ArrayList;
  */
 public class LauchingFragment extends Fragment {
     private static final String TAG = LauchingFragment.class.getSimpleName();
+    public static final String PAGE_POSiTION = "page_position";
     ArrayList<String> arrayList;
 
     @Override
@@ -51,7 +52,10 @@ public class LauchingFragment extends Fragment {
         lvLauchingMenu.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int pos, long id) {
+                Bundle bundle = new Bundle();
+                bundle.putInt(PAGE_POSiTION, pos);
                 SongListFragment songListFragment = new SongListFragment();
+                songListFragment.setArguments(bundle);
                 FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.replace(R.id.placeHolder, songListFragment, MainActivity.FRAGMENT_SONG_LIST);

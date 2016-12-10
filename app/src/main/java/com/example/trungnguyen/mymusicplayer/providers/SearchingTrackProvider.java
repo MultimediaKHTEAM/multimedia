@@ -12,6 +12,7 @@ import android.util.Log;
 
 import com.example.trungnguyen.mymusicplayer.Playlist;
 import com.example.trungnguyen.mymusicplayer.helpers.LastFMHelper;
+import com.example.trungnguyen.mymusicplayer.models.Artist;
 import com.example.trungnguyen.mymusicplayer.models.TopTracks;
 
 import org.json.JSONArray;
@@ -68,54 +69,25 @@ public class SearchingTrackProvider extends ContentProvider {
         }
         if (query.length() > 1) {
             LastFMHelper helper = new LastFMHelper(query);
-            String completeUrl = helper.getSearchingUrl();
+            String completeSearchingTrackUrl = helper.getSearchingUrl();
+            String completeSearchingArtistUrl = helper.getArtistSearchingUrl();
             Log.d(TAG, query);
-            OkHttpClient client = new OkHttpClient();
-            Request request = new Request.Builder().url(completeUrl).build();
-            Call call = client.newCall(request);
-            call.enqueue(new Callback() {
-                @Override
-                public void onFailure(Call call, IOException e) {
-                    Log.d(TAG, "You have error about this action");
-                }
-
-                @Override
-                public void onResponse(Call call, Response response) throws IOException {
-                    if (response.isSuccessful()) {
-                        try {
-                            Playlist.searchingTracks = new ArrayList<>();
-                            String jsonString = response.body().string();
-                            JSONObject responseJson = new JSONObject(jsonString);
-                            JSONObject resultsObj = responseJson.getJSONObject("results");
-                            JSONObject trackmatchesObj = resultsObj.getJSONObject("trackmatches");
-                            JSONArray trackArr = trackmatchesObj.getJSONArray("track");
-                            for (int i = 0; i < trackArr.length(); i++) {
-                                JSONObject track = trackArr.getJSONObject(i);
-                                String trackName = track.getString("name");
-                                String trackArtis = track.getString("artist");
-                                String trackUrl = track.getString("url");
-                                String imageUrl = null;
-                                JSONArray imageUrls = track.getJSONArray("image");
-                                for (int j = 0; j < imageUrls.length(); j++) {
-                                    JSONObject imageObj = imageUrls.getJSONObject(j);
-                                    if (imageObj.getString("size").equals("small")) {
-                                        imageUrl = imageObj.getString("#text");
-                                        break;
-                                    }
-                                }
-                                Playlist.searchingTracks.add(new TopTracks(trackName, trackArtis, imageUrl, trackUrl));
-                            }
-                        } catch (JSONException e) {
-                            Log.d(TAG, "JSonException Error");
-                        }
-                    }
-                }
-            });
+            TrackRequest(completeSearchingTrackUrl);
+            ArtistRequest(completeSearchingArtistUrl);
+            int i = 0;
             if (Playlist.searchingTracks.size() > 0) {
-                for (int i = 0; i < Playlist.searchingTracks.size() && cursor.getCount() < 50; i++) {
+                for (i = 0; i < Playlist.searchingTracks.size(); i++) {
                     String trackInfo = Playlist.searchingTracks.get(i).getTopTrackName() + " - " + Playlist.searchingTracks.get(i).getArtist();
                     if (trackInfo.toUpperCase().contains(enterStringWithoutPlus)) {
                         cursor.addRow(new Object[]{i, trackInfo, i});
+                    }
+                }
+            }
+            if (Playlist.artists.size() > 0) {
+                for (int j = i; j < Playlist.artists.size() + Playlist.searchingTracks.size(); j++) {
+                    String artistInfo = Playlist.artists.get(j).getName();
+                    if (artistInfo.toUpperCase().contains(enterStringWithoutPlus)) {
+                        cursor.addRow(new Object[]{j, artistInfo, j});
                     }
                 }
             }
@@ -124,6 +96,94 @@ public class SearchingTrackProvider extends ContentProvider {
             Log.d(TAG, "Entering more input");
         }
         return cursor;
+    }
+
+    private void ArtistRequest(String completeUrl) {
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder().url(completeUrl).build();
+        Call call = client.newCall(request);
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.d(TAG, "You have error about this action");
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    try {
+                        Playlist.artists = new ArrayList<>();
+                        String jsonString = response.body().string();
+                        JSONObject responseJson = new JSONObject(jsonString);
+                        JSONObject resultsObj = responseJson.getJSONObject("results");
+                        JSONObject trackmatchesObj = resultsObj.getJSONObject("artistmatches");
+                        JSONArray trackArr = trackmatchesObj.getJSONArray("artist");
+                        for (int i = 0; i < trackArr.length(); i++) {
+                            JSONObject track = trackArr.getJSONObject(i);
+                            String artistName = track.getString("name");
+                            String linstener = track.getString("listeners");
+                            String artisUrl = track.getString("url");
+                            String imageUrl = null;
+                            JSONArray imageUrls = track.getJSONArray("image");
+                            for (int j = 0; j < imageUrls.length(); j++) {
+                                JSONObject imageObj = imageUrls.getJSONObject(j);
+                                if (imageObj.getString("size").equals("medium")) {
+                                    imageUrl = imageObj.getString("#text");
+                                    break;
+                                }
+                            }
+                            Playlist.artists.add(new Artist(imageUrl, artisUrl, linstener, artistName));
+                        }
+                    } catch (JSONException e) {
+                        Log.d(TAG, "JSonException Error");
+                    }
+                }
+            }
+        });
+    }
+
+    private void TrackRequest(String completeUrl) {
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder().url(completeUrl).build();
+        Call call = client.newCall(request);
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.d(TAG, "You have error about this action");
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    try {
+                        Playlist.searchingTracks = new ArrayList<>();
+                        String jsonString = response.body().string();
+                        JSONObject responseJson = new JSONObject(jsonString);
+                        JSONObject resultsObj = responseJson.getJSONObject("results");
+                        JSONObject trackmatchesObj = resultsObj.getJSONObject("trackmatches");
+                        JSONArray trackArr = trackmatchesObj.getJSONArray("track");
+                        for (int i = 0; i < trackArr.length(); i++) {
+                            JSONObject track = trackArr.getJSONObject(i);
+                            String trackName = track.getString("name");
+                            String trackArtis = track.getString("artist");
+                            String trackUrl = track.getString("url");
+                            String imageUrl = null;
+                            JSONArray imageUrls = track.getJSONArray("image");
+                            for (int j = 0; j < imageUrls.length(); j++) {
+                                JSONObject imageObj = imageUrls.getJSONObject(j);
+                                if (imageObj.getString("size").equals("small")) {
+                                    imageUrl = imageObj.getString("#text");
+                                    break;
+                                }
+                            }
+                            Playlist.searchingTracks.add(new TopTracks(trackName, trackArtis, imageUrl, trackUrl));
+                        }
+                    } catch (JSONException e) {
+                        Log.d(TAG, "JSonException Error");
+                    }
+                }
+            }
+        });
     }
 
     @Nullable

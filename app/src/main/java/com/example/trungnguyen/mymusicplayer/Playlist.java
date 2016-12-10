@@ -1,5 +1,6 @@
 package com.example.trungnguyen.mymusicplayer;
 
+import com.example.trungnguyen.mymusicplayer.models.Artist;
 import com.example.trungnguyen.mymusicplayer.models.Song;
 import com.example.trungnguyen.mymusicplayer.models.TopTracks;
 
@@ -11,9 +12,9 @@ import java.util.List;
  */
 public class Playlist {
     public static Song[] songs = {
-            new Song("http://f9.stream.nixcdn.com/8e877f8b4e17905423336a47d461a55c/583d5114/NhacCuaTui931/ShakeIt-DiepLamAnh-4673279.mp3", 1, "Phía Sau Một Cô Gái", 180, "Soobin Hoàng Sơn", "Label1", 2012, 100, false),
-            new Song("http://s82.stream.nixcdn.com/1960c1a50ba7bd0e5e65e4df42ab64dc/583d5114/NhacCuaTui928/Starboy-TheWeekndDaftPunk-4593455.mp3", 2, "Làm Người Yêu Anh Nhé", 190, "3 Chú Bộ Đội", "Label2", 2005, 101, false),
-            new Song("http://f9.stream.nixcdn.com/419f01ff0c8df8f123219774dcf2e7f8/582ca3f0/NhacCuaTui931/LaiNhoNguoiYeu-DanNguyen-4632876.mp3", 3, "Nếu Lúc Ấy", 200, "Bang Kieu ft Van Mai Huong", "Label3", 2002, 102, false),
+            new Song("https://parsefiles.back4app.com/cXhfBZUu1YgwlTHw97njIaDtIzcXdE3elqiVFghe/83fa1afba45ff992d714c3027a470584_audio.mp3", 1, "Anh Cứ Đi Đi", 180, "Thái Tuyết Trâm", "Label1", 2012, 100, false),
+            new Song("https://parsefiles.back4app.com/cXhfBZUu1YgwlTHw97njIaDtIzcXdE3elqiVFghe/492ca9140be92c7de5ff3e435ac3f3e9_audio.mp3", 2, "Cho Anh Gần Em Thêm Chút Nữa", 190, "Hương Tràm", "Label2", 2005, 101, false),
+            new Song("https://parsefiles.back4app.com/cXhfBZUu1YgwlTHw97njIaDtIzcXdE3elqiVFghe/ff790971155f13222a0e3dcc04f2910a_audio.mp3", 3, "Mơ", 200, "Đen ft Hậu Vi", "Label3", 2002, 102, false),
             new Song("http://zmp3-mp3-s1.zmp3-bdhcm-1.za.zdn.vn/6848a9e333a7daf983b6/6214618151873325179?key=Yk_nsEpgjkeO6m0aJ445wg&expires=1479317927", 4, "Mình Là Gì Của Nhau", 210, "Lou Hoang", "Label4", 2013, 103, false),
             new Song("http://s1.mp3.zdn.vn/357ceb7172359b6bc224/4706531562149718908?key=bflBhoIoAGH5diLiOJ9kdw&expires=1479316645", 5, "Gương Mặt Lạ Lẫm", 220, "Mr.Siro", "Label5", 1987, 104, false),
             new Song("http://zmp3-mp3-s1.r.za.zdn.vn/1e5739bfa2fb4ba512ea/5530946653574441023?key=yN9G6FHDUR_PvbeoeZAU4A&expires=1479317158", 6, "Quá Khứ Còn Lại Gì", 230, "Rocker Nguyen", "Label6", 2013, 105, false),
@@ -27,4 +28,6 @@ public class Playlist {
     public static List<TopTracks> topTracks;
 
     public static List<TopTracks> searchingTracks;
+
+    public static List<Artist> artists;
 }

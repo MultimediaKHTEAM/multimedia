@@ -49,8 +49,10 @@ public class SearchingListAdapter extends ArrayAdapter<TopTracks> {
         }
         holder.title.setText(mTopTrack.get(position).getTopTrackName());
         holder.artist.setText(mTopTrack.get(position).getArtist());
-        Picasso.with(mContext).load(mTopTrack.
-                get(position).getImageUrl()).into(holder.avarta);
+        if (mTopTrack.get(position).getImageUrl() != null) {
+            Picasso.with(mContext).load(mTopTrack.
+                    get(position).getImageUrl()).into(holder.avarta);
+        }
         return convertView;
     }
 
