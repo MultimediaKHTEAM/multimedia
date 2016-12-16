@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.example.trungnguyen.mymusicplayer.models.Song;
+import com.example.trungnguyen.mymusicplayer.models.TopTracks;
 import com.google.gson.Gson;
 
 /**
@@ -15,14 +16,14 @@ public class LastSongPreference {
 //    private static final String LAST_PLAYING_SONG_TITLE = "last_playing_song_title";
 //    private static final String LAST_PLAYING_SONG_ARTICS = "last_playing_song_artics";
     private static final String LAST_PLAYING_SONG_REPEATCOUNT = "last_playing_song_repeatcount";
-    public static Song playingSong;
+    public static TopTracks playingSong;
     public static int mIndex;
 
     public static SharedPreferences getLastSongPreference(Context context) {
         return context.getSharedPreferences("MyMusicPlayer", Activity.MODE_PRIVATE);
     }
 
-    public static void saveLastSong(Context context, Song mSong) {
+    public static void saveLastSong(Context context, TopTracks mSong) {
         SharedPreferences.Editor editor = getLastSongPreference(context).edit();
         Gson gson = new Gson();
         String jsonString = gson.toJson(mSong);
@@ -30,11 +31,11 @@ public class LastSongPreference {
         editor.commit();
     }
 
-    public static Song getLastSong(Context context) {
+    public static TopTracks getLastSong(Context context) {
         SharedPreferences mSharedPreferences = getLastSongPreference(context);
         String lastplaySong = mSharedPreferences.getString("JSON_STRING", "");
         Gson mGson = new Gson();
-        playingSong = mGson.fromJson(lastplaySong, Song.class);
+        playingSong = mGson.fromJson(lastplaySong, TopTracks.class);
         return playingSong;
     }
 

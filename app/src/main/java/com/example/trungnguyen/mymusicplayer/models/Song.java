@@ -17,16 +17,13 @@ public class Song implements Parcelable {
     private int mYearReleased;
     private long mAlbumId;
     private boolean mIsFavorite;
-    public Song(String url, long id, String title, int duration, String artist, String label,
-                int yearReleased, long albumId, boolean isFavorite) {
+
+    public Song(String url, String title, String artist, String label,
+                boolean isFavorite) {
         setmSongUrl(url);
-        setId(id);
         setTitle(title);
-        setDuration(duration);
         setArtist(artist);
         setLabel(label);
-        setYearReleased(yearReleased);
-        setAlbumId(albumId);
         setIsFavorite(isFavorite);
     }
 

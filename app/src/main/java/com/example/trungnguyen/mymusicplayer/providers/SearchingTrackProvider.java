@@ -176,7 +176,7 @@ public class SearchingTrackProvider extends ContentProvider {
                                     break;
                                 }
                             }
-                            Playlist.searchingTracks.add(new TopTracks(trackName, trackArtis, imageUrl, trackUrl));
+                            Playlist.searchingTracks.add(new TopTracks(trackName, trackArtis, imageUrl, trackUrl, false));
                         }
                     } catch (JSONException e) {
                         Log.d(TAG, "JSonException Error");

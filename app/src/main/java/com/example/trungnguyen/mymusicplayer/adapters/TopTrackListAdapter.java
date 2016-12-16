@@ -39,7 +39,7 @@ public class TopTrackListAdapter extends ArrayAdapter<TopTracks> {
         if (convertView == null) {
             holder = new TopTrackViewHolder();
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.top_track_item, parent, false);
-            holder.avarta = (ImageView) convertView.findViewById(R.id.avatar);
+//            holder.avarta = (ImageView) convertView.findViewById(R.id.avatar);
             holder.title = (TextView) convertView.findViewById(R.id.tvTopTrackTitle);
             holder.artist = (TextView) convertView.findViewById(R.id.tvTopTrackArtist);
             holder.btPlay = (ImageView) convertView.findViewById(R.id.playButton);

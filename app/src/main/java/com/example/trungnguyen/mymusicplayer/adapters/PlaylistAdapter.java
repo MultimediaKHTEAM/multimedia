@@ -11,16 +11,17 @@ import android.widget.TextView;
 import com.example.trungnguyen.mymusicplayer.R;
 import com.example.trungnguyen.mymusicplayer.fragments.SongListFragment;
 import com.example.trungnguyen.mymusicplayer.models.Song;
+import com.example.trungnguyen.mymusicplayer.models.TopTracks;
 
 /**
  * Created by benjakuben on 5/12/16.
  */
 public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.SongViewHolder> {
-    private Song[] mSongs;
+    private TopTracks[] mSongs;
     private Context mContext;
     private SongViewHolder mViewHolder;
     private  SongListFragment.OnSongItemSelectedInterface mListener;
-    public PlaylistAdapter(Context context, Song[] songs, SongListFragment.OnSongItemSelectedInterface listener) {
+    public PlaylistAdapter(Context context, TopTracks[] songs, SongListFragment.OnSongItemSelectedInterface listener) {
         mContext = context;
         mSongs = songs;
         mListener = listener;
@@ -56,8 +57,8 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.SongVi
             itemView.setOnClickListener(this);
         }
 
-        public void bindSong(Song song) {
-            mTitleLabel.setText(song.getTitle());
+        public void bindSong(TopTracks song) {
+            mTitleLabel.setText(song.getTopTrackName());
         }
         @Override
         public void onClick(View view) {

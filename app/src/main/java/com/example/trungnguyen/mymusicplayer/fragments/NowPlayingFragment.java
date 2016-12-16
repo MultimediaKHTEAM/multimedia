@@ -38,7 +38,9 @@ import com.example.trungnguyen.mymusicplayer.Playlist;
 import com.example.trungnguyen.mymusicplayer.R;
 import com.example.trungnguyen.mymusicplayer.managers.LastSongPreference;
 import com.example.trungnguyen.mymusicplayer.models.Song;
+import com.example.trungnguyen.mymusicplayer.models.TopTracks;
 import com.ogaclejapan.smarttablayout.SmartTabLayout;
+import com.ogaclejapan.smarttablayout.utils.v4.Bundler;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItemAdapter;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItems;
 
@@ -62,7 +64,7 @@ public class NowPlayingFragment extends Fragment {
     private Messenger playerMessenger;
     private String songUrl = null;
     private int repeatCount = 0;
-    Song mSong;
+    TopTracks mSong;
     private boolean isRepeatOne = false;
     private boolean isRepeatAll = false;
     private int songIndex;
@@ -114,7 +116,7 @@ public class NowPlayingFragment extends Fragment {
         Log.d(TAG, "Now Playing Fragment onCreateView");
         View mReturnView = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_playing_song, container, false);
         updateUIFromService();
-        addControls(mReturnView);
+        Log.d(TAG, getArguments().getInt(MainActivity.LIST_POSITION) + "");
         if (getArguments().getParcelable(MainActivity.SONG_NAME) != null) {
             mSong = getArguments().getParcelable(MainActivity.SONG_NAME);
             songIndex = getArguments().getInt("LIST_INDEX");
@@ -122,12 +124,14 @@ public class NowPlayingFragment extends Fragment {
             mSong = LastSongPreference.getLastSong(getActivity());
             songIndex = LastSongPreference.getLastSongPlayingIndex(getActivity());
         }
+        addControls(mReturnView);
         if (mSong != null) {
-            songUrl = mSong.getmSongUrl();
-            if (mSong.isFavorite())
+            songUrl = mSong.getTrackUrl();
+            Log.d(TAG, songUrl);
+            if (mSong.isLike())
                 imgLike.setImageResource(R.drawable.thumb_up);
             else imgLike.setImageResource(R.drawable.thumb_up_outline);
-            songTitle.setText(mSong.getTitle());
+            songTitle.setText(mSong.getTopTrackName());
             songArtist.setText(mSong.getArtist());
             ButtonSkipPreviousEvent();
             ButtonLikeEvent();
@@ -243,12 +247,12 @@ public class NowPlayingFragment extends Fragment {
         imgLike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!mSong.isFavorite()) {
+                if (!mSong.isLike()) {
                     imgLike.setImageResource(R.drawable.thumb_up);
-                    mSong.setIsFavorite(true);
+                    mSong.setLike(true);
                 } else {
                     imgLike.setImageResource(R.drawable.thumb_up_outline);
-                    mSong.setIsFavorite(false);
+                    mSong.setLike(false);
                 }
             }
         });
@@ -287,12 +291,11 @@ public class NowPlayingFragment extends Fragment {
         FragmentPagerItemAdapter adapter = new FragmentPagerItemAdapter(
                 getChildFragmentManager(),
                 FragmentPagerItems.with(getActivity())
-                        .add("SONG_IMG", SongImageFragment.class)
+                        .add("SONG_IMG", SongImageFragment.class, new Bundler().putString("COVER", mSong.getImageUrl()).get())
                         .add("LYRICS", LyrisFragment.class)
                         .create());
         ViewPager viewPager = (ViewPager) mReturnView.findViewById(R.id.viewpager);
         viewPager.setAdapter(adapter);
-
         SmartTabLayout viewPagerTab = (SmartTabLayout) mReturnView.findViewById(R.id.viewpagertab);
         viewPagerTab.setViewPager(viewPager);
     }

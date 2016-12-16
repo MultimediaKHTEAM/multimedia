@@ -84,7 +84,7 @@ public class TopTracksFragment extends Fragment {
                     break;
                 }
             }
-            Playlist.topTracks.add(new TopTracks(trackName, artist, imageUrl, trackUrl));
+            Playlist.topTracks.add(new TopTracks(trackName, artist, imageUrl, trackUrl, false));
         }
     }
 

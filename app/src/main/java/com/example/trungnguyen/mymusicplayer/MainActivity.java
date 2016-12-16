@@ -25,32 +25,41 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
-import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 
-import com.example.trungnguyen.mymusicplayer.adapters.PlaylistAdapter;
 import com.example.trungnguyen.mymusicplayer.fragments.LauchingFragment;
 import com.example.trungnguyen.mymusicplayer.fragments.NowPlayingFragment;
 import com.example.trungnguyen.mymusicplayer.fragments.SearchingFragment;
 import com.example.trungnguyen.mymusicplayer.fragments.SongListFragment;
 import com.example.trungnguyen.mymusicplayer.fragments.TopTracksFragment;
+import com.example.trungnguyen.mymusicplayer.models.TopTracks;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelSlideListener;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelState;
 
-import java.util.ArrayList;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
-import io.gresse.hugo.vumeterlibrary.VuMeterView;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 
 public class MainActivity extends AppCompatActivity
         implements SongListFragment.OnSongItemSelectedInterface,
-        NavigationView.OnNavigationItemSelectedListener, SearchView.OnQueryTextListener {
+        NavigationView.OnNavigationItemSelectedListener,
+        SearchView.OnQueryTextListener {
     public static final String SONG_NAME = "song_name";
     public static final String LIST_POSITION = "list_pos";
     public static final String KEY_SONG = "song";
@@ -182,6 +191,9 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onQueryTextSubmit(String query) {
         SearchingFragment searchingFragment = new SearchingFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("HTML_REQUEST", query);
+        searchingFragment.setArguments(bundle);
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.placeHolder, searchingFragment, SEACHING_FRAGMENT);
@@ -286,5 +298,4 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-
 }
