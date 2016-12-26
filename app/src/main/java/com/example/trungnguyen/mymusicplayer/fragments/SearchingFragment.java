@@ -107,7 +107,7 @@ public class SearchingFragment extends Fragment {
                 Bundle bundle = new Bundle();
                 bundle.putParcelable(MainActivity.SONG_NAME, Playlist.tracks[pos]);
                 Log.d(TAG, pos + "");
-                bundle.putInt(MainActivity.LIST_POSITION, pos);
+//                bundle.putInt(MainActivity.LIST_POSITION, pos);
                 nowPlayingFragment.setArguments(bundle);
                 FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();

@@ -69,7 +69,7 @@ public class NowPlayingFragment extends Fragment {
     private boolean isRepeatAll = false;
     private int songIndex;
     BroadcastReceiver getMediaInfoReceive;
-    // onServices connected and disconnected
+    // TODO: onServices connected and disconnected 
     ServiceConnection serviceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
@@ -119,7 +119,8 @@ public class NowPlayingFragment extends Fragment {
         Log.d(TAG, getArguments().getInt(MainActivity.LIST_POSITION) + "");
         if (getArguments().getParcelable(MainActivity.SONG_NAME) != null) {
             mSong = getArguments().getParcelable(MainActivity.SONG_NAME);
-            songIndex = getArguments().getInt("LIST_INDEX");
+            songIndex = getArguments().getInt("LIST_INDEX",
+                    LastSongPreference.getLastSongPlayingIndex(getActivity()));
         } else {
             mSong = LastSongPreference.getLastSong(getActivity());
             songIndex = LastSongPreference.getLastSongPlayingIndex(getActivity());
@@ -311,7 +312,6 @@ public class NowPlayingFragment extends Fragment {
             if (repeatAll) {
                 NowPlayingFragment nowPlayingFragment = new NowPlayingFragment();
                 PlayNewSong(songIndex, nowPlayingFragment);
-
             }
             mVuMeterView.pause();
         }
