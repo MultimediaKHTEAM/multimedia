@@ -279,7 +279,8 @@ public class NowPlayingFragment extends Fragment {
         imgPlayPause.setBackgroundResource(R.drawable.click_effet);
         imgLike = (ImageView) mReturnView.findViewById(R.id.imgLove);
         imgLike.setBackgroundResource(R.drawable.click_effet);
-        initSmartTabSelector(mReturnView);
+        if (mSong != null)
+            initSmartTabSelector(mReturnView);
         seekBarIntent = new Intent(MainActivity.BROADCAST_SEEKBAR);
         btSkipNext = (ImageView) mReturnView.findViewById(R.id.btSkipNext);
         btSkipNext.setBackgroundResource(R.drawable.click_effet);
